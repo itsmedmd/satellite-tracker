@@ -8,6 +8,7 @@ const pathBuilder = (subpath) => path.join(process.cwd(), subpath);
 const nextConfig = {
   reactStrictMode: true,
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    config.resolve.alias["data"] = pathBuilder('data');
     config.resolve.alias["cesiumSource"] = pathBuilder('node_modules/cesium/Source');
     config.output["sourcePrefix"] = '';
 
