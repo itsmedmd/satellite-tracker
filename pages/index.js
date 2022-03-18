@@ -7,7 +7,10 @@ import {
   Viewer,
   CesiumTerrainProvider,
   Ion,
-  IonResource
+  IonResource,
+  Cartesian3,
+  ReferenceFrame,
+  Color as CesiumColor
 } from "cesiumSource/Cesium";
 
 export default function Home() {
@@ -645,7 +648,7 @@ export default function Home() {
     "1 40998U 97051ABL 18070.54859090  .00000252  00000-0  78007-4 0  9993",
     "2 40998  86.3930 171.0089 0009234  38.9873  19.5640 14.37109208663626"] ;
 
-  function propagateOrbitalDebris(now) {
+  const propagateOrbitalDebris = (now) => {
     const debrisRecords = [];
     const datasetSize = irridiumDebris.length;
     const posVel = []; 
@@ -682,105 +685,27 @@ export default function Home() {
     return posVel;
   };
 
+  const startUpdate = (data, objects) => {
+   const km =  1000;
+   const debrisPos = new Cartesian3(0, 0, 0);
+
+   for (let i=0; i < data.length; i++) {
+      if (data[i] != undefined) {
+        debrisPos.x = data[i].position.x * km;
+        debrisPos.y = data[i].position.y * km ;
+        debrisPos.z = data[i].position.z * km;
+        objects[i].position = debrisPos;
+      }
+    }
+
+    //setInterval(function () {updatePosition() }, 50);
+  };
+
   useEffect(() => {
     const now = new Date();
     const propagatedData = propagateOrbitalDebris(now);
-    console.log(propagatedData);
 
-    /*const tleLine1 = '1 25544U 98067A   13149.87225694  .00009369  00000-0  16828-3 0  9031';
-    const tleLine2 = '2 25544 051.6485 199.1576 0010128 012.7275 352.5669 15.50581403831869';
-  
-    // Initialize a satellite record
-    const satrec = satellite.twoline2satrec(tleLine1, tleLine2);
-  
-    // Propagate satellite using time since epoch
-    // this creates ECI coordinates
-    const now = new Date();
-    let positionAndVelocity = satellite.sgp4 (satrec, 0);
-    console.log('positionAndVelocity sgp4', positionAndVelocity);
-
-    positionAndVelocity = satellite.propagate(
-      satrec,
-      now.getUTCFullYear(),
-      now.getUTCMonth() + 1, // month has to be in range 1-12.
-      now.getUTCDate(),
-      now.getUTCHours(),
-      now.getUTCMinutes(),
-      now.getUTCSeconds()
-    );
-
-    console.log('positionAndVelocity propagate', positionAndVelocity);
-
-    const positionEci = positionAndVelocity.position;
-    const velocityEci = positionAndVelocity.velocity;
-
-
-    // Set the Observer at 122.03 West by 36.96 North, in RADIANS
-    const observerGd = {
-        longitude: satellite.degreesToRadians(-122.0308),
-        latitude: satellite.degreesToRadians(36.9613422),
-        height: 0.370
-    };
-
-    // create GMST for coordinate transforms
-    const gmst = satellite.gstime(
-        now.getUTCFullYear(),
-        now.getUTCMonth() + 1, // month has to be in range 1-12.
-        now.getUTCDate(),
-        now.getUTCHours(),
-        now.getUTCMinutes(),
-        now.getUTCSeconds()
-    );
-    console.log("gmst:", gmst);
-
-    // You can get ECF, Geodetic and Look Angles
-    const positionEcf   = satellite.eciToEcf(positionEci, gmst);
-    const observerEcf   = satellite.geodeticToEcf(observerGd);
-    const positionGd    = satellite.eciToGeodetic(positionEci, gmst);
-    const lookAngles    = satellite.ecfToLookAngles(observerGd, positionEcf);
-    console.log("positionEcf", positionEcf);
-    console.log("observerEcf", observerEcf);
-    console.log("positionGd", positionGd);
-    console.log("lookAngles", lookAngles);
-
-    
-
-    // The coordinates are all stored in key-value pairs.
-    // ECI and ECF are accessed by `x`, `y`, `z` properties.
-    const satelliteX = positionEci.x;
-    const satelliteY = positionEci.y;
-    const satelliteZ = positionEci.z;
-    console.log("satelliteX", satelliteX);
-    console.log("satelliteY", satelliteY);
-    console.log("satelliteZ", satelliteZ);
-
-    // Look Angles may be accessed by `azimuth`, `elevation`, `range_sat` properties.
-    const azimuth   = lookAngles.azimuth;
-    const elevation = lookAngles.elevation;
-    const rangeSat  = lookAngles.rangeSat;
-    console.log("azimuth", azimuth);
-    console.log("elevation", elevation);
-    console.log("rangeSat", rangeSat);
-
-    // Geodetic coords are accessed via `longitude`, `latitude`, `height`.
-    const longitude = positionGd.longitude;
-    const latitude  = positionGd.latitude;
-    const height    = positionGd.height;
-    console.log("longitude", longitude);
-    console.log("latitude", latitude);
-    console.log("height", height);
-.3
-    // Convert the RADIANS to DEGREES.
-    const longitudeDeg = satellite.degreesLong(longitude);
-    const latitudeDeg  = satellite.degreesLat(latitude);
-    console.log("longitudeDeg", longitudeDeg);
-    console.log("latitudeDeg", latitudeDeg);*/
-
-
-
-
-    // Create 3D renders using Cesium
-    /*Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiODM0ODNmMS0wMmZjLTRiNTUtODAxMy0yMWZlMmI5OWE0ZDAiLCJpZCI6ODQ0ODMsImlhdCI6MTY0NjMxNzk4MX0.uVpY8O0Gg7Q3hjFtCfDksBL_4FCvj9AplE6qGK117K4";
+    Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiODM0ODNmMS0wMmZjLTRiNTUtODAxMy0yMWZlMmI5OWE0ZDAiLCJpZCI6ODQ0ODMsImlhdCI6MTY0NjMxNzk4MX0.uVpY8O0Gg7Q3hjFtCfDksBL_4FCvj9AplE6qGK117K4";
 
     const viewer = new Viewer("cesium-container", {
       terrainProvider: new CesiumTerrainProvider({
@@ -800,7 +725,38 @@ export default function Home() {
       navigationHelpButton: false
     });
 
-    viewer.resolutionScale = 0.7;*/
+    viewer.resolutionScale = 0.8;
+    
+    const objects = [];
+    for (let debrisID = 0; debrisID < propagatedData.length; debrisID++) {
+      objects.push(viewer.entities.add(
+          {
+            position: {
+              value: Cartesian3.fromDegrees(-75.59777, 40.03883),
+              referenceFrame: ReferenceFrame.FIXED 
+            },
+            point: {
+              color: CesiumColor.CHARTREUSE,
+              pixelSize : 5
+            }
+          }
+        )
+      );
+    }
+
+    const km =  1000;
+    const debrisPos = new Cartesian3(0, 0, 0);
+ 
+    for (let i=0; i < propagatedData.length; i++) {
+       if (propagatedData[i] != undefined) {
+         debrisPos.x = propagatedData[i].position.x * km;
+         debrisPos.y = propagatedData[i].position.y * km ;
+         debrisPos.z = propagatedData[i].position.z * km;
+         objects[i].position = debrisPos;
+       }
+     }
+
+    //startUpdate(propagatedData, objects);
   });
 
   return (
