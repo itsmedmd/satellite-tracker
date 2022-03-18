@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 import * as satellite from "satellite.js";
 
-import spaceStationsTLE from "data/spaceStationsTLE";
+import { combinedTLE } from "utils/combineTLE";
 
 import {
   Viewer,
@@ -70,7 +70,7 @@ export default function Home() {
 
   useEffect(() => {
     const now = new Date();
-    const propagatedData = propagateOrbitalDebris(spaceStationsTLE, now);
+    const propagatedData = propagateOrbitalDebris(combinedTLE, now);
 
     Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiODM0ODNmMS0wMmZjLTRiNTUtODAxMy0yMWZlMmI5OWE0ZDAiLCJpZCI6ODQ0ODMsImlhdCI6MTY0NjMxNzk4MX0.uVpY8O0Gg7Q3hjFtCfDksBL_4FCvj9AplE6qGK117K4";
 
@@ -99,12 +99,12 @@ export default function Home() {
       objects.push(viewer.entities.add(
           {
             position: {
-              value: Cartesian3.fromDegrees(-75.59777, 40.03883),
+              value: Cartesian3.fromDegrees(0, 0),
               referenceFrame: ReferenceFrame.FIXED 
             },
             point: {
               color: CesiumColor.CHARTREUSE,
-              pixelSize : 5
+              pixelSize : 4
             }
           }
         )
