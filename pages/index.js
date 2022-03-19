@@ -15,63 +15,49 @@ import {
 } from "cesiumSource/Cesium";
 
 export default function Home() {
-  const propagateOrbitalDebris = (data, now) => {
-    const debrisRecords = [];
-    const datasetSize = data.length;
-    const posVel = []; 
+  // calculate position and velocity of each object from TLE data
+  const propagateObjects = (data, now) => {
+    const objects = [];
+    const results = []; 
 
     let j = 0;
-    for (let i=0; i < datasetSize; i++) {
+    for (let i=0; i < data.length; i++) {
       const tle1 = data[j];
       const tle2 = data[j + 1];
       if (typeof tle1 == 'string' || tle1 instanceof String || typeof tle2 == 'string' || tle2 instanceof String) {
-          debrisRecords.push(satellite.twoline2satrec(tle1, tle2));
+        objects.push(satellite.twoline2satrec(tle1, tle2));
       }
       j = j + 2;
     }
 
     // Propagate debris
-    for (let i=0; i < datasetSize; i++) {
-      if (debrisRecords[i] != undefined) { 
+    for (let i=0; i < data.length; i++) {
+      if (objects[i]) { 
          const propagated = satellite.propagate(
-           debrisRecords[i],
-           now.getUTCFullYear(),
-           now.getUTCMonth() + 1, // month has to be in range 1-12.
-           now.getUTCDate(),
-           now.getUTCHours(),
-           now.getUTCMinutes(),
-           now.getUTCSeconds()
+          objects[i],
+          now.getUTCFullYear(),
+          now.getUTCMonth() + 1, // month has to be in range 1-12.
+          now.getUTCDate(),
+          now.getUTCHours(),
+          now.getUTCMinutes(),
+          now.getUTCSeconds()
         );
 
         if (propagated.position && propagated.velocity) {
-          posVel.push(propagated);
+          results.push(propagated);
         }
       }
     }
 
-    return posVel;
-  };
-
-  const startUpdate = (data, objects) => {
-   const km =  1000;
-   const debrisPos = new Cartesian3(0, 0, 0);
-
-   for (let i=0; i < data.length; i++) {
-      if (data[i] != undefined) {
-        debrisPos.x = data[i].position.x * km;
-        debrisPos.y = data[i].position.y * km ;
-        debrisPos.z = data[i].position.z * km;
-        objects[i].position = debrisPos;
-      }
-    }
-
-    //setInterval(function () {updatePosition() }, 50);
+    return results;
   };
 
   useEffect(() => {
+    // Calculate position and velocity from TLE data
     const now = new Date();
-    const propagatedData = propagateOrbitalDebris(combinedTLE, now);
+    const propagatedData = propagateObjects(combinedTLE, now);
 
+    // Create 3D Cesium viewer
     Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiODM0ODNmMS0wMmZjLTRiNTUtODAxMy0yMWZlMmI5OWE0ZDAiLCJpZCI6ODQ0ODMsImlhdCI6MTY0NjMxNzk4MX0.uVpY8O0Gg7Q3hjFtCfDksBL_4FCvj9AplE6qGK117K4";
 
     const viewer = new Viewer("cesium-container", {
@@ -94,13 +80,17 @@ export default function Home() {
 
     viewer.resolutionScale = 0.8;
     
+    // Create entities in 3D viewer for each object
+    const km =  1000; // need to multiply each coordinate by 1000 to get km
     const objects = [];
-    for (let debrisID = 0; debrisID < propagatedData.length; debrisID++) {
+
+    propagatedData.forEach((obj) => 
       objects.push(viewer.entities.add(
           {
             position: {
-              value: Cartesian3.fromDegrees(0, 0),
-              referenceFrame: ReferenceFrame.FIXED 
+              x: obj.position.x * km,
+              y: obj.position.y * km,
+              z: obj.position.z * km
             },
             point: {
               color: CesiumColor.CHARTREUSE,
@@ -108,22 +98,8 @@ export default function Home() {
             }
           }
         )
-      );
-    }
-
-    const km =  1000;
-    const debrisPos = new Cartesian3(0, 0, 0);
- 
-    for (let i=0; i < propagatedData.length; i++) {
-       if (propagatedData[i] != undefined) {
-         debrisPos.x = propagatedData[i].position.x * km;
-         debrisPos.y = propagatedData[i].position.y * km ;
-         debrisPos.z = propagatedData[i].position.z * km;
-         objects[i].position = debrisPos;
-       }
-     }
-
-    //startUpdate(propagatedData, objects);
+      )
+    );
   });
 
   return (
