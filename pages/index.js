@@ -9,51 +9,30 @@ import {
   CesiumTerrainProvider,
   Ion,
   IonResource,
-  IonImageryProvider,
   Cartesian3,
+  NearFarScalar,
+  JulianDate,
   PointPrimitiveCollection,
   Color as CesiumColor
 } from "cesiumSource/Cesium";
 
 export default function Home() {
-  let yearstep = 0;
-  let monthstep = 0;
-  let datestep = 0;
-  let hrstep = 0;
-  let minstep = 0;
-  let secstep = 0;
+  let lastTime = null;
 
-  // Propagate an array of satrecs with provided time offsets
+  // Propagate an array of satrecs with provided time
   // using a web worker (if available)
-  const createPropagatedArray = (
-    satrecs,
-    now,
-    worker = null,
-    year = 0,
-    month = 0,
-    date = 0,
-    hr = 0,
-    min = 0,
-    sec = 0
-  ) => {
+  const createPropagatedArray = (satrecs, now, worker) => {
     return new Promise(function(resolve, reject) {
       // if web workers are supported, use the created worker
       if (worker && 1 > 2) {
+        console.log("worker", worker);
         worker.onmessage = (e) => {
           resolve(e.data);
         };
   
-        worker.postMessage({
-          satrecs,
-          now,
-          year,
-          month,
-          date,
-          hr,
-          min,
-          sec
-        });
+        worker.postMessage({ satrecs, now });
       } else {
+        console.log("fallback");
         // if web workers are not supported, use this fallback code
         const results = [];
 
@@ -61,12 +40,12 @@ export default function Home() {
           if (record) { 
             const propagated = satellite.propagate(
               record,
-              now.getUTCFullYear() + year,
-              now.getUTCMonth() + 1 + month, // month has to be in range from 1 to 12
-              now.getUTCDate() + date,
-              now.getUTCHours() + hr,
-              now.getUTCMinutes() + min,
-              now.getUTCSeconds() + sec
+              now.getUTCFullYear(),
+              now.getUTCMonth() + 1, // month has to be in range from 1 to 12
+              now.getUTCDate(),
+              now.getUTCHours(),
+              now.getUTCMinutes(),
+              now.getUTCSeconds()
             );
     
             if (propagated.position && propagated.velocity) {
@@ -103,60 +82,36 @@ export default function Home() {
   };
 
   // update predicted object position in a set moment of time
-  const updatePosition = (pointsCollection, satrecs, now, worker) => {
-    secstep = secstep + 10;
-    console.log("updating");
+  const updatePosition = (pointsCollection, satrecs, worker, currentTime) => {
+    // clone JulianDate but set seconds with Math.floor
+    const newTime = new JulianDate();
+    JulianDate.clone(currentTime, newTime);
+    newTime.secondsOfDay = Math.floor(newTime.secondsOfDay);
 
-    // recalculate time offsets
-    if (secstep > 59) {
-      minstep = minstep + 1;
-      secstep = 0;
+    if (!newTime.equals(lastTime)) {
+      console.log("updating");
+      // ADD GUARD AGAINST TIME INCREASE
+      // ADD GUARD AGAINST TIME INCREASE
+      // ADD GUARD AGAINST TIME INCREASE
+      // ADD GUARD AGAINST TIME INCREASE
+      // ADD GUARD AGAINST TIME INCREASE
+      const newDate = JulianDate.toDate(newTime)
+      lastTime = newTime;
+
+      // Propagate objects
+      createPropagatedArray(satrecs, newDate, worker)
+      .then(results => {
+          // set new positions for objects in 3D viewer
+          const km = 1000; // need to multiply each coordinate by 1000 to get km
+          const points = pointsCollection._pointPrimitives;
+
+          for (let i = 0; i < points.length; i++) {
+            if (results[i] && points[i]) {
+              points[i].position =  new Cartesian3(results[i].position.x * km, results[i].position.y * km, results[i].position.z * km);
+            }
+          }
+      });
     }
-
-    if (minstep > 59) {
-      hrstep = hrstep + 1;
-      minstep = 0;
-    }
-    
-    if (hrstep > 23) {
-      datestep = datestep + 1;
-      hrstep = 0;
-    }
-
-    // FIX THIS
-    // FIX THIS
-    // FIX THIS
-    // FIX THIS
-    if (datestep > 30) {
-      monthstep = monthstep + 1;
-      datestep = 0;
-    }
-
-    if (monthstep + 1 > 11) {
-      yearstep = yearstep + 1;
-      monthstep = 0;
-    }
-
-    // Propagate objects
-    createPropagatedArray(
-      satrecs,
-      now,
-      worker,
-      yearstep,
-      monthstep,
-      datestep,
-      hrstep,
-      minstep,
-      secstep
-    ).then(results => {
-        // set new positions for objects in 3D viewer
-        const km = 1000; // need to multiply each coordinate by 1000 to get km
-        const points = pointsCollection._pointPrimitives;
-
-        for (let i = 0; i < points.length; i++) {
-          points[i].position =  new Cartesian3(results[i].position.x * km, results[i].position.y * km, results[i].position.z * km);
-        }
-    });
   }; 
 
   useEffect(() => {
@@ -172,7 +127,7 @@ export default function Home() {
       terrainProvider: new CesiumTerrainProvider({
         url: IonResource.fromAssetId(1),
       }),
-      animation: false,
+      //animation: false,
       baseLayerPicker: false,
       fullscreenButton: true,
       vrButton: false,
@@ -183,7 +138,7 @@ export default function Home() {
       selectionIndicator: false,
       timeline: false,
       navigationHelpButton: false,
-      targetFrameRate: 30,
+      targetFrameRate: 24,
       requestRenderMode: true
     });
 
@@ -194,27 +149,30 @@ export default function Home() {
     // render objects in initial object positions and
     // start periodically updating their positions
     const now = new Date();
+    const pointsCollection = viewer.scene.primitives.add(new PointPrimitiveCollection());
     
     propagateObjects(combinedTLE, now, worker)
     .then(({ results: propagatedData, satrecs }) => {
       // Create entities in 3D viewer for each object
       const km =  1000; // need to multiply each coordinate by 1000 to get km
-      const pointsCollection = viewer.scene.primitives.add(new PointPrimitiveCollection());
 
       propagatedData.forEach((obj) => 
         pointsCollection.add({
           position: new Cartesian3(obj.position.x * km, obj.position.y * km, obj.position.z * km),
           color: CesiumColor.CHARTREUSE,
-          pixelSize: 2
+          pixelSize: 2,
+          scaleByDistance: new NearFarScalar(1e2, 1.5, 1e9, 0),
+          translucencyByDistance: new NearFarScalar(4e7, 1, 1e9, 0)
         })
       );
 
       viewer.scene.render();
-      viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, satrecs, now, worker));
+      viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, satrecs, worker, viewer.clock.currentTime));
     });
     
     return () => {
       worker.terminate();
+      pointsCollection.removeAll();
     };
   });
 
@@ -226,7 +184,6 @@ export default function Home() {
 
       <main>
         <div id="cesium-container" className="fullSize"></div>
-        <div id="animationContainer"></div>
       </main>
     </div>
   )
