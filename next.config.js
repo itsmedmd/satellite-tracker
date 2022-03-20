@@ -18,6 +18,8 @@ const nextConfig = {
       new CopyPlugin({patterns: [{ from: pathBuilder('node_modules/cesium/Build/Cesium/Workers'), to: '../public/Workers' }]}),
       new CopyPlugin({patterns: [{ from: pathBuilder('node_modules/cesium/Source/Assets'), to: '../public/Assets' }]}),
       new CopyPlugin({patterns: [{ from: pathBuilder('node_modules/cesium/Source/Widgets'), to: '../public/Widgets' }]}),
+      new CopyPlugin({patterns: [{ from: pathBuilder('node_modules/satellite.js/dist/satellite.min.js'), to: '../public/webWorkers' }]}),
+      new CopyPlugin({patterns: [{ from: pathBuilder('webWorkers'), to: '../public/webWorkers' }]}),
       new webpack.DefinePlugin({CESIUM_BASE_URL: JSON.stringify('')})
     );
     
