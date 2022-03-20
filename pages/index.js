@@ -9,7 +9,9 @@ import {
   CesiumTerrainProvider,
   Ion,
   IonResource,
+  IonImageryProvider,
   Cartesian3,
+  PointPrimitiveCollection,
   Color as CesiumColor
 } from "cesiumSource/Cesium";
 
@@ -36,7 +38,7 @@ export default function Home() {
   ) => {
     return new Promise(function(resolve, reject) {
       // if web workers are supported, use the created worker
-      if (worker) {
+      if (worker && 1 > 2) {
         worker.onmessage = (e) => {
           resolve(e.data);
         };
@@ -101,8 +103,9 @@ export default function Home() {
   };
 
   // update predicted object position in a set moment of time
-  const updatePosition = (objects, satrecs, now, worker) => {
-    secstep = secstep + 1;
+  const updatePosition = (pointsCollection, satrecs, now, worker) => {
+    secstep = secstep + 10;
+    console.log("updating");
 
     // recalculate time offsets
     if (secstep > 59) {
@@ -147,16 +150,11 @@ export default function Home() {
       secstep
     ).then(results => {
         // set new positions for objects in 3D viewer
-        const km = 1000;
+        const km = 1000; // need to multiply each coordinate by 1000 to get km
+        const points = pointsCollection._pointPrimitives;
 
-        const position = new Cartesian3(0, 0, 0);
-        for (let i=0; i < results.length; i++) {
-          if (results[i] && objects[i]) {
-            position.x = results[i].position.x * km;
-            position.y = results[i].position.y * km;
-            position.z = results[i].position.z * km;
-            objects[i].position = position;
-          }
+        for (let i = 0; i < points.length; i++) {
+          points[i].position =  new Cartesian3(results[i].position.x * km, results[i].position.y * km, results[i].position.z * km);
         }
     });
   }; 
@@ -184,46 +182,38 @@ export default function Home() {
       sceneModePicker: false,
       selectionIndicator: false,
       timeline: false,
-      navigationHelpButton: false
+      navigationHelpButton: false,
+      targetFrameRate: 30,
+      requestRenderMode: true
     });
 
+    viewer.scene.debugShowFramesPerSecond = true;
     viewer.resolutionScale = 0.7;
 
     // Calculate position and velocity from TLE data,
     // render objects in initial object positions and
     // start periodically updating their positions
     const now = new Date();
-    let updateInterval = null;
     
     propagateObjects(combinedTLE, now, worker)
     .then(({ results: propagatedData, satrecs }) => {
       // Create entities in 3D viewer for each object
       const km =  1000; // need to multiply each coordinate by 1000 to get km
-      const objects = [];
+      const pointsCollection = viewer.scene.primitives.add(new PointPrimitiveCollection());
 
       propagatedData.forEach((obj) => 
-        objects.push(viewer.entities.add(
-            {
-              position: {
-                x: obj.position.x * km,
-                y: obj.position.y * km,
-                z: obj.position.z * km
-              },
-              point: {
-                color: CesiumColor.CHARTREUSE,
-                pixelSize : 2
-              }
-            }
-          )
-        )
+        pointsCollection.add({
+          position: new Cartesian3(obj.position.x * km, obj.position.y * km, obj.position.z * km),
+          color: CesiumColor.CHARTREUSE,
+          pixelSize: 2
+        })
       );
 
-      // start updating positions for each object
-      updateInterval = setInterval(() => updatePosition(objects, satrecs, now, worker), 50);
+      viewer.scene.render();
+      viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, satrecs, now, worker));
     });
     
     return () => {
-      clearInterval(updateInterval);
       worker.terminate();
     };
   });
@@ -236,6 +226,7 @@ export default function Home() {
 
       <main>
         <div id="cesium-container" className="fullSize"></div>
+        <div id="animationContainer"></div>
       </main>
     </div>
   )
