@@ -37,10 +37,7 @@ export default function Home() {
     return new Promise(function(resolve, reject) {
       // if web workers are supported, use the created worker
       if (worker) {
-        console.log("using worker");
-  
         worker.onmessage = (e) => {
-          console.log("received message from worker!");
           resolve(e.data);
         };
   
@@ -56,8 +53,6 @@ export default function Home() {
         });
       } else {
         // if web workers are not supported, use this fallback code
-        console.log("using fallback");
-  
         const results = [];
 
         satrecs.forEach((record) => {
@@ -107,7 +102,7 @@ export default function Home() {
 
   // update predicted object position in a set moment of time
   const updatePosition = (objects, satrecs, now, worker) => {
-    minstep = minstep + 0.5;
+    secstep = secstep + 1;
 
     // recalculate time offsets
     if (secstep > 59) {
@@ -140,7 +135,7 @@ export default function Home() {
     }
 
     // Propagate objects
-    const results = createPropagatedArray(
+    createPropagatedArray(
       satrecs,
       now,
       worker,
@@ -150,28 +145,25 @@ export default function Home() {
       hrstep,
       minstep,
       secstep
-    );
+    ).then(results => {
+        // set new positions for objects in 3D viewer
+        const km = 1000;
 
-    // set new positions for objects in 3D viewer
-    const km = 1000;
-
-    //console.log(results.length, objects.length);
-
-    const position = new Cartesian3(0, 0, 0);
-    for (let i=0; i < results.length; i++) {
-      if (results[i] && objects[i]) {
-        position.x = results[i].position.x * km;
-        position.y = results[i].position.y * km;
-        position.z = results[i].position.z * km;
-        objects[i].position = position;
-      }
-    }
+        const position = new Cartesian3(0, 0, 0);
+        for (let i=0; i < results.length; i++) {
+          if (results[i] && objects[i]) {
+            position.x = results[i].position.x * km;
+            position.y = results[i].position.y * km;
+            position.z = results[i].position.z * km;
+            objects[i].position = position;
+          }
+        }
+    });
   }; 
 
   useEffect(() => {
     let worker = null;
     if (window.Worker) {
-      console.log("created worker");
       worker = new Worker("webWorkers/positionUpdateWorker.js");
     }
 
@@ -182,7 +174,6 @@ export default function Home() {
       terrainProvider: new CesiumTerrainProvider({
         url: IonResource.fromAssetId(1),
       }),
-      maximumScreenSpaceError: 32,
       animation: false,
       baseLayerPicker: false,
       fullscreenButton: true,
@@ -198,8 +189,12 @@ export default function Home() {
 
     viewer.resolutionScale = 0.7;
 
-    // Calculate position and velocity from TLE data
+    // Calculate position and velocity from TLE data,
+    // render objects in initial object positions and
+    // start periodically updating their positions
     const now = new Date();
+    let updateInterval = null;
+    
     propagateObjects(combinedTLE, now, worker)
     .then(({ results: propagatedData, satrecs }) => {
       // Create entities in 3D viewer for each object
@@ -222,13 +217,13 @@ export default function Home() {
           )
         )
       );
+
+      // start updating positions for each object
+      updateInterval = setInterval(() => updatePosition(objects, satrecs, now, worker), 50);
     });
     
-    // start updating positions for each object
-    //const updateInterval = setInterval(() => updatePosition(objects, satrecs, now, worker), 1000);
-
     return () => {
-      //clearInterval(updateInterval);
+      clearInterval(updateInterval);
       worker.terminate();
     };
   });
