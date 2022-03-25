@@ -1,113 +1,176 @@
-import activeGeosynchronousTLE from "../data/activeGeosynchronousTLE";
-import activeTLE from "../data/activeTLE";
-import amateurRadioTLE from "../data/amateurRadioTLE";
-import datanalystTLEa from "../data/analystTLE";
-import argosTLE from "../data/argosTLE";
-import beidouTLE from "../data/beidouTLE";
+import { Color as CesiumColor } from "cesiumSource/Cesium";
+
+// special-interest satellites
+import spaceStationsTLE from "../data/spaceStationsTLE";
 import brightestTLE from "../data/brightestTLE";
+import activeTLE from "../data/activeTLE";
+import analystTLEa from "../data/analystTLE";
+import russianASATDebrisTLE from "../data/russianASATDebrisTLE";
+import indianASATDebrisTLE from "../data/indianASATDebrisTLE";
 import chineseASATDebrisTLE from "../data/chineseASATDebrisTLE";
+import iridium33DebrisTLE from "../data/iridium33DebrisTLE";
 import cosmos2251DebrisTLE from "../data/cosmos2251DebrisTLE";
-import cubeSatsTLE from "../data/cubeSatsTLE";
-import disasterMonitoringTLE from "../data/disasterMonitoringTLE";
+
+// weather and earth resources satellites
+import weatherTLE from "../data/weatherTLE";
+import noaaTLE from "../data/noaaTLE";
+import goesTLE from "../data/goesTLE";
 import earthResourcesTLE from "../data/earthResourcesTLE";
-import educationTLE from "../data/educationTLE";
-import engineeringTLE from "../data/engineeringTLE";
+import searchRescueTLE from "../data/searchRescueTLE";
+import disasterMonitoringTLE from "../data/disasterMonitoringTLE";
+import trackingTLE from "../data/trackingTLE";
+import argosTLE from "../data/argosTLE";
+import planetTLE from "../data/planetTLE";
+import spireTLE from "../data/spireTLE";
+
+// communications satellites
+import activeGeosynchronousTLE from "../data/activeGeosynchronousTLE";
+import amateurRadioTLE from "../data/amateurRadioTLE";
 import experimentalCommTLE from "../data/experimentalCommTLE";
-import galileoTLE from "../data/galileoTLE";
-import geodeticTLE from "../data/geodeticTLE";
 import geoProtectedZoneTLE from "../data/geoProtectedZoneTLE";
 import geoProtectedZonePlusTLE from "../data/geoProtectedZonePlusTLE";
 import globalstarTLE from "../data/globalstarTLE";
-import glonassOperationalTLE from "../data/glonassOperationalTLE";
-import gnssTLE from "../data/gnssTLE";
-import goesTLE from "../data/goesTLE";
 import gorizontTLE from "../data/gorizontTLE";
-import gpsOperationalTLE from "../data/gpsOperationalTLE";
-import indianASATDebrisTLE from "../data/indianASATDebrisTLE";
 import intelsatTLE from "../data/intelsatTLE";
-import iridium33DebrisTLE from "../data/iridium33DebrisTLE";
 import iridiumNextTLE from "../data/iridiumNextTLE";
 import iridiumTLE from "../data/iridiumTLE";
-import miscellaneousMilitaryTLE from "../data/miscellaneousMilitaryTLE";
 import molniyaTLE from "../data/molniyaTLE";
-import navyNavigationSatelliteSystemTLE from "../data/navyNavigationSatelliteSystemTLE";
-import noaaTLE from "../data/noaaTLE";
 import onewebTLE from "../data/onewebTLE";
 import orbcommTLE from "../data/orbcommTLE";
 import otherCommTLE from "../data/otherCommTLE";
-import otherSatellitesTLE from "../data/otherSatellitesTLE";
-import planetTLE from "../data/planetTLE";
-import radarCalibrationTLE from "../data/radarCalibrationTLE";
 import radugaTLE from "../data/radugaTLE";
-import russianASATDebrisTLE from "../data/russianASATDebrisTLE";
-import russianLeoNavigationTLE from "../data/russianLeoNavigationTLE";
-import satelliteBasedAugmentationSystemTLE from "../data/satelliteBasedAugmentationSystemTLE";
 import satnogsTLE from "../data/satnogsTLE";
-import searchRescueTLE from "../data/searchRescueTLE";
 import sesTLE from "../data/sesTLE";
-import spaceEarthScienceTLE from "../data/spaceEarthScienceTLE";
-import spaceStationsTLE from "../data/spaceStationsTLE";
-import spireTLE from "../data/spireTLE";
 import starlinkTLE from "../data/starlinkTLE";
 import swarmTLE from "../data/swarmTLE";
-import trackingTLE from "../data/trackingTLE";
-import weatherTLE from "../data/weatherTLE";
+
+// navigation satellites
+import gnssTLE from "../data/gnssTLE";
+import gpsOperationalTLE from "../data/gpsOperationalTLE";
+import glonassOperationalTLE from "../data/glonassOperationalTLE";
+import galileoTLE from "../data/galileoTLE";
+import beidouTLE from "../data/beidouTLE";
+import satelliteBasedAugmentationSystemTLE from "../data/satelliteBasedAugmentationSystemTLE";
+import navyNavigationSatelliteSystemTLE from "../data/navyNavigationSatelliteSystemTLE";
+import russianLeoNavigationTLE from "../data/russianLeoNavigationTLE";
+
+// scientific satellites
+import educationTLE from "../data/educationTLE";
+import engineeringTLE from "../data/engineeringTLE";
+import geodeticTLE from "../data/geodeticTLE";
+import spaceEarthScienceTLE from "../data/spaceEarthScienceTLE";
+
+// miscellaneous satellites
+import miscellaneousMilitaryTLE from "../data/miscellaneousMilitaryTLE";
+import radarCalibrationTLE from "../data/radarCalibrationTLE";
+import otherSatellitesTLE from "../data/otherSatellitesTLE";
+import cubeSatsTLE from "../data/cubeSatsTLE";
+
+// https://cesium.com/learn/cesiumjs/ref-doc/Color.html
+const specialInterestColor = CesiumColor.CORNFLOWERBLUE;
+const weatherEarthColor = CesiumColor.CADETBLUE;
+const communicationsColor = CesiumColor.PALEVIOLETRED;
+const navigationColor = CesiumColor.AQUA ;
+const scientificColor = CesiumColor.MEDIUMSPRINGGREEN ;
+const miscellaneousColor = CesiumColor.CHOCOLATE;
+
+const specialInterest = {
+    color: specialInterestColor,
+    data: [
+        ...spaceStationsTLE,
+        ...brightestTLE,
+        ...activeTLE,
+        ...analystTLEa,
+        ...russianASATDebrisTLE,
+        ...indianASATDebrisTLE,
+        ...chineseASATDebrisTLE,
+        ...iridium33DebrisTLE,
+        ...cosmos2251DebrisTLE
+    ]
+};
+
+const weatherEarth = {
+    color: weatherEarthColor,
+    data: [
+        ...weatherTLE,
+        ...noaaTLE,
+        ...goesTLE,
+        ...earthResourcesTLE,
+        ...searchRescueTLE,
+        ...disasterMonitoringTLE,
+        ...trackingTLE,
+        ...argosTLE,
+        ...planetTLE,
+        ...spireTLE
+    ]
+};
+
+const communications = {
+    color: communicationsColor,
+    data: [
+        ...activeGeosynchronousTLE,
+        ...amateurRadioTLE,
+        ...experimentalCommTLE,
+        ...geoProtectedZoneTLE,
+        ...geoProtectedZonePlusTLE,
+        ...globalstarTLE,
+        ...gorizontTLE,
+        ...intelsatTLE,
+        ...iridiumNextTLE,
+        ...iridiumTLE,
+        ...molniyaTLE,
+        ...onewebTLE,
+        ...orbcommTLE,
+        ...otherCommTLE,
+        ...radugaTLE,
+        ...satnogsTLE,
+        ...sesTLE,
+        ...starlinkTLE,
+        ...swarmTLE
+    ]
+};
+
+const navigation = {
+    color: navigationColor,
+    data: [
+        ...gnssTLE,
+        ...gpsOperationalTLE,
+        ...glonassOperationalTLE,
+        ...galileoTLE,
+        ...beidouTLE,
+        ...satelliteBasedAugmentationSystemTLE,
+        ...navyNavigationSatelliteSystemTLE,
+        ...russianLeoNavigationTLE
+    ]
+};
+
+const scientific = {
+    color: scientificColor,
+    data: [
+        ...educationTLE,
+        ...engineeringTLE,
+        ...geodeticTLE,
+        ...spaceEarthScienceTLE
+    ]
+};
+
+const miscellaneous = {
+    color: miscellaneousColor,
+    data: [
+        ...miscellaneousMilitaryTLE,
+        ...radarCalibrationTLE,
+        ...otherSatellitesTLE,
+        ...cubeSatsTLE
+    ]
+};
 
 const combinedTLE = [
-    ...activeGeosynchronousTLE,
-    ...activeTLE,
-    ...amateurRadioTLE,
-    ...datanalystTLEa,
-    ...argosTLE,
-    ...beidouTLE,
-    ...brightestTLE,
-    ...chineseASATDebrisTLE,
-    ...cosmos2251DebrisTLE,
-    ...cubeSatsTLE,
-    ...disasterMonitoringTLE,
-    ...earthResourcesTLE,
-    ...educationTLE,
-    ...engineeringTLE,
-    ...experimentalCommTLE,
-    ...galileoTLE,
-    ...geodeticTLE,
-    ...geoProtectedZoneTLE,
-    ...geoProtectedZonePlusTLE,
-    ...globalstarTLE,
-    ...glonassOperationalTLE,
-    ...gnssTLE,
-    ...goesTLE,
-    ...gorizontTLE,
-    ...gpsOperationalTLE,
-    ...indianASATDebrisTLE,
-    ...intelsatTLE,
-    ...iridium33DebrisTLE,
-    ...iridiumNextTLE,
-    ...iridiumTLE,
-    ...miscellaneousMilitaryTLE,
-    ...molniyaTLE,
-    ...navyNavigationSatelliteSystemTLE,
-    ...noaaTLE,
-    ...onewebTLE,
-    ...orbcommTLE,
-    ...otherCommTLE,
-    ...otherSatellitesTLE,
-    ...planetTLE,
-    ...radarCalibrationTLE,
-    ...radugaTLE,
-    ...russianASATDebrisTLE,
-    ...russianLeoNavigationTLE,
-    ...satelliteBasedAugmentationSystemTLE,
-    ...satnogsTLE,
-    ...searchRescueTLE,
-    ...sesTLE,
-    ...spaceEarthScienceTLE,
-    ...spaceStationsTLE,
-    ...spireTLE,
-    ...starlinkTLE,
-    ...swarmTLE,
-    ...trackingTLE,
-    ...weatherTLE
+    specialInterest,
+    weatherEarth,
+    communications,
+    navigation,
+    scientific,
+    miscellaneous,
 ];
 
 export { combinedTLE };
