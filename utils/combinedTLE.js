@@ -5,6 +5,8 @@ import spaceStationsTLE from "../data/spaceStationsTLE";
 import brightestTLE from "../data/brightestTLE";
 import activeTLE from "../data/activeTLE";
 import analystTLEa from "../data/analystTLE";
+
+// debris (special-interest)
 import russianASATDebrisTLE from "../data/russianASATDebrisTLE";
 import indianASATDebrisTLE from "../data/indianASATDebrisTLE";
 import chineseASATDebrisTLE from "../data/chineseASATDebrisTLE";
@@ -41,8 +43,10 @@ import otherCommTLE from "../data/otherCommTLE";
 import radugaTLE from "../data/radugaTLE";
 import satnogsTLE from "../data/satnogsTLE";
 import sesTLE from "../data/sesTLE";
-import starlinkTLE from "../data/starlinkTLE";
 import swarmTLE from "../data/swarmTLE";
+
+// starlink (communications)
+import starlinkTLE from "../data/starlinkTLE";
 
 // navigation satellites
 import gnssTLE from "../data/gnssTLE";
@@ -67,12 +71,25 @@ import otherSatellitesTLE from "../data/otherSatellitesTLE";
 import cubeSatsTLE from "../data/cubeSatsTLE";
 
 // https://cesium.com/learn/cesiumjs/ref-doc/Color.html
-const specialInterestColor = CesiumColor.CORNFLOWERBLUE;
-const weatherEarthColor = CesiumColor.CADETBLUE;
-const communicationsColor = CesiumColor.PALEVIOLETRED;
-const navigationColor = CesiumColor.AQUA ;
-const scientificColor = CesiumColor.MEDIUMSPRINGGREEN ;
-const miscellaneousColor = CesiumColor.CHOCOLATE;
+const debrisColor = CesiumColor.LIGHTSLATEGRAY;
+const specialInterestColor = CesiumColor.YELLOWGREEN;
+const weatherEarthColor = CesiumColor.TURQUOISE;
+const communicationsColor = CesiumColor.AQUA;
+const navigationColor = CesiumColor.CHARTREUSE;
+const scientificColor = CesiumColor.MINTCREAM;
+const miscellaneousColor = CesiumColor.OLDLACE;
+const starlinkColor = CesiumColor.YELLOW;
+
+const debris = {
+    color: debrisColor,
+    data: [
+        ...russianASATDebrisTLE,
+        ...indianASATDebrisTLE,
+        ...chineseASATDebrisTLE,
+        ...iridium33DebrisTLE,
+        ...cosmos2251DebrisTLE
+    ]
+};
 
 const specialInterest = {
     color: specialInterestColor,
@@ -80,12 +97,7 @@ const specialInterest = {
         ...spaceStationsTLE,
         ...brightestTLE,
         ...activeTLE,
-        ...analystTLEa,
-        ...russianASATDebrisTLE,
-        ...indianASATDebrisTLE,
-        ...chineseASATDebrisTLE,
-        ...iridium33DebrisTLE,
-        ...cosmos2251DebrisTLE
+        ...analystTLEa
     ]
 };
 
@@ -125,8 +137,14 @@ const communications = {
         ...radugaTLE,
         ...satnogsTLE,
         ...sesTLE,
-        ...starlinkTLE,
         ...swarmTLE
+    ]
+};
+
+const starlink = {
+    color: starlinkColor,
+    data: [
+        ...starlinkTLE
     ]
 };
 
@@ -165,12 +183,14 @@ const miscellaneous = {
 };
 
 const combinedTLE = [
+    debris,
     specialInterest,
     weatherEarth,
     communications,
     navigation,
     scientific,
     miscellaneous,
+    starlink
 ];
 
 export { combinedTLE };

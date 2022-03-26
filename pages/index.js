@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import * as satellite from "satellite.js";
-import { combinedTLE } from "utils/combineTLE";
+import { combinedTLE } from "utils/combinedTLE";
 
 import {
   Viewer,
@@ -140,7 +140,7 @@ export default function Home() {
           position: new Cartesian3(obj.position.x * km, obj.position.y * km, obj.position.z * km),
           color: category.color,
           pixelSize: 2,
-          scaleByDistance: new NearFarScalar(4e6, 1.5, 8e6, 1),
+          scaleByDistance: new NearFarScalar(8e6, 1.5, 11e6, 1),
           translucencyByDistance: new NearFarScalar(4e7, 1, 1e9, 0)
         })
       );
