@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import * as satellite from "satellite.js";
-import { combinedTLE } from "utils/combineTLE";
+import { combinedTLE } from "utils/combinedTLE";
 
 import {
   Viewer,
@@ -11,8 +11,7 @@ import {
   Cartesian3,
   NearFarScalar,
   JulianDate,
-  PointPrimitiveCollection,
-  Color as CesiumColor
+  PointPrimitiveCollection
 } from "cesiumSource/Cesium";
 
 export default function Home() {
@@ -118,20 +117,34 @@ export default function Home() {
 
     // Calculate position and velocity from TLE data
     const now = new Date();
-    const pointsCollection = viewer.scene.primitives.add(new PointPrimitiveCollection());
-    const { results: propagatedData, satrecs } = propagateObjects(combinedTLE, now);
+
+    const propagatedCategories = combinedTLE.map((category) => {
+      return {
+        data: propagateObjects(category.data, now),
+        color: category.color
+      }
+    });
+
     const km = 1000; // need to multiply each coordinate by 1000 to get km
+    let allSatrecs = [];
+    const pointsCollection = viewer.scene.primitives.add(new PointPrimitiveCollection());
 
     // Create entities in 3D viewer for each object
-    propagatedData.forEach((obj) => 
-      pointsCollection.add({
-        position: new Cartesian3(obj.position.x * km, obj.position.y * km, obj.position.z * km),
-        color: CesiumColor.CHARTREUSE,
-        pixelSize: 2,
-        scaleByDistance: new NearFarScalar(4e6, 1.5, 8e6, 1),
-        translucencyByDistance: new NearFarScalar(4e7, 1, 1e9, 0)
-      })
-    );
+    propagatedCategories.forEach((category) => {
+      // append satrecs for category to all satrecs variable
+      allSatrecs = allSatrecs.concat(category.data.satrecs);
+
+      // create 3D entities with category color
+      category.data.results.forEach((obj) => 
+        pointsCollection.add({
+          position: new Cartesian3(obj.position.x * km, obj.position.y * km, obj.position.z * km),
+          color: category.color,
+          pixelSize: 2,
+          scaleByDistance: new NearFarScalar(8e6, 1.5, 11e6, 1),
+          translucencyByDistance: new NearFarScalar(4e7, 1, 1e9, 0)
+        })
+      );
+    });
 
     // render scene with initial points
     viewer.scene.render();
@@ -141,7 +154,7 @@ export default function Home() {
     viewer.clock.shouldAnimate = true;
 
     // start updating the position of points based on clock time
-    viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, satrecs, viewer.clock.currentTime));
+    viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, allSatrecs, viewer.clock.currentTime));
     
     return () => {
       pointsCollection.removeAll();
