@@ -11,6 +11,7 @@ const nextConfig = {
     config.resolve.alias["data"] = pathBuilder('data');
     config.resolve.alias["utils"] = pathBuilder('utils');
     config.resolve.alias["styles"] = pathBuilder('styles');
+    config.resolve.alias["components"] = pathBuilder('components');
     config.resolve.alias["cesiumSource"] = pathBuilder('node_modules/cesium/Source');
     config.output["sourcePrefix"] = '';
 

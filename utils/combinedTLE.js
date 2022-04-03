@@ -3,8 +3,10 @@ import { Color as CesiumColor } from "cesiumSource/Cesium";
 // special-interest satellites
 import spaceStationsTLE from "../data/spaceStationsTLE";
 import brightestTLE from "../data/brightestTLE";
+import analystTLE from "../data/analystTLE";
+
+// active (special-interest)
 import activeTLE from "../data/activeTLE";
-import analystTLEa from "../data/analystTLE";
 
 // debris (special-interest)
 import russianASATDebrisTLE from "../data/russianASATDebrisTLE";
@@ -71,16 +73,18 @@ import otherSatellitesTLE from "../data/otherSatellitesTLE";
 import cubeSatsTLE from "../data/cubeSatsTLE";
 
 // https://cesium.com/learn/cesiumjs/ref-doc/Color.html
-const debrisColor = CesiumColor.LIGHTSLATEGRAY;
-const specialInterestColor = CesiumColor.YELLOWGREEN;
-const weatherEarthColor = CesiumColor.TURQUOISE;
+const debrisColor = CesiumColor.LIGHTSLATEGRAY.withAlpha(0.6);
+const starlinkColor = CesiumColor.CORNSILK;
+const activeColor = CesiumColor.DODGERBLUE;
 const communicationsColor = CesiumColor.AQUA;
-const navigationColor = CesiumColor.CHARTREUSE;
-const scientificColor = CesiumColor.MINTCREAM;
-const miscellaneousColor = CesiumColor.OLDLACE;
-const starlinkColor = CesiumColor.YELLOW;
+const weatherEarthColor = CesiumColor.SALMON;
+const specialInterestColor = CesiumColor.RED;
+const scientificColor = CesiumColor.INDIANRED;
+const miscellaneousColor = CesiumColor.LIME;
+const navigationColor = CesiumColor.POWDERBLUE;
 
 const debris = {
+    name: "Debris",
     color: debrisColor,
     data: [
         ...russianASATDebrisTLE,
@@ -92,16 +96,25 @@ const debris = {
 };
 
 const specialInterest = {
+    name: "Special interest",
     color: specialInterestColor,
     data: [
-        ...spaceStationsTLE,
         ...brightestTLE,
-        ...activeTLE,
-        ...analystTLEa
+        ...spaceStationsTLE,
+        ...analystTLE
+    ]
+};
+
+const active = {
+    name: "Active",
+    color: activeColor,
+    data: [
+        ...activeTLE
     ]
 };
 
 const weatherEarth = {
+    name: "Weather and Earth resources",
     color: weatherEarthColor,
     data: [
         ...weatherTLE,
@@ -118,6 +131,7 @@ const weatherEarth = {
 };
 
 const communications = {
+    name: "Communications",
     color: communicationsColor,
     data: [
         ...activeGeosynchronousTLE,
@@ -142,6 +156,7 @@ const communications = {
 };
 
 const starlink = {
+    name: "Starlink",
     color: starlinkColor,
     data: [
         ...starlinkTLE
@@ -149,6 +164,7 @@ const starlink = {
 };
 
 const navigation = {
+    name: "Navigation",
     color: navigationColor,
     data: [
         ...gnssTLE,
@@ -163,6 +179,7 @@ const navigation = {
 };
 
 const scientific = {
+    name: "Scientific",
     color: scientificColor,
     data: [
         ...educationTLE,
@@ -173,6 +190,7 @@ const scientific = {
 };
 
 const miscellaneous = {
+    name: "Miscellaneous",
     color: miscellaneousColor,
     data: [
         ...miscellaneousMilitaryTLE,
@@ -185,6 +203,7 @@ const miscellaneous = {
 const combinedTLE = [
     debris,
     specialInterest,
+    active,
     weatherEarth,
     communications,
     navigation,

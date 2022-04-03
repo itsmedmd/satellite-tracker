@@ -1,0 +1,21 @@
+.navigation,
+.nav-toggle {
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.navigation {
+    background-color: rgba(240, 248, 255, 0.3);
+    height: 100vh;
+    width: 20%;
+    padding-top: 64px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+}
+
+.nav-toggle {
+    z-index: 1001;
+}

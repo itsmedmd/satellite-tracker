@@ -1,8 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
-import * as satellite from "satellite.js";
-import { combinedTLE } from "utils/combinedTLE";
-
 import {
   Viewer,
   CesiumTerrainProvider,
@@ -14,52 +11,50 @@ import {
   PointPrimitiveCollection
 } from "cesiumSource/Cesium";
 
-export default function Home() {
+import { combinedTLE } from "utils/combinedTLE";
+import createPropagatedArray from "utils/createPropagatedArray";
+import propagateObjects from "utils/propagateObjects";
+
+import Navigation from "components/Navigation";
+import TimeControls from "components/TimeControls";
+
+const Home = () => {
+  const startTime = new Date();
+  const [clockTime, setClockTime] = useState(startTime);
+  const [viewerObject, setViewerObject] = useState(null);
+  const [pointsCollectionObject, setPointsCollectionObject] = useState(null);
+  const [objectCategories, setObjectCategories] = useState([]);
   let lastTime = null;
 
-  // Propagate an array of satrecs with provided time
-  const createPropagatedArray = (satrecs, now) => {
-    const results = [];
-
-    satrecs.forEach((record) => {
-      if (record) { 
-        const propagated = satellite.propagate(
-          record,
-          now.getUTCFullYear(),
-          now.getUTCMonth() + 1, // month has to be in range from 1 to 12
-          now.getUTCDate(),
-          now.getUTCHours(),
-          now.getUTCMinutes(),
-          now.getUTCSeconds()
-        );
-
-        if (propagated.position && propagated.velocity) {
-          results.push(propagated);
-        }
+  // toggle points visibility of a specified category
+  const changePointsVisibility = (category) => {
+    for (let i = 0; i < pointsCollectionObject.length; i++) {
+      const point = pointsCollectionObject.get(i);
+      if (point.color.red === category.color.red &&
+          point.color.green === category.color.green &&
+          point.color.blue === category.color.blue) {
+        point.show = !point.show;
       }
-    });
-
-    return results;
+    }
   };
 
-  // calculate position and velocity of each object from TLE data
-  const propagateObjects = (data, now) => {
-    const satrecs = [];
-
-    // transform TLE data to satrec data
-    let j = 0;
-    for (let i=0; i < data.length; i++) {
-      const tle1 = data[j];
-      const tle2 = data[j + 1];
-      if (typeof tle1 == 'string' && typeof tle2 == 'string') {
-        satrecs.push(satellite.twoline2satrec(tle1, tle2));
+  // toggle visibility of a specified category 
+  const changeCategoryVisibility = useCallback((name) => {
+    const newCategories = [...objectCategories];
+    let changedCategory = null;
+    newCategories.forEach((category) => {
+      if (category.name === name) {
+        changedCategory = category;
+        category.visible = !category.visible;
       }
-      j = j + 2;
-    }
+    });
+    setObjectCategories(newCategories);
+    changePointsVisibility(changedCategory);
+  }, [objectCategories]);
 
-    // Propagate objects
-    const results = createPropagatedArray(satrecs, now);
-    return { results, satrecs };
+  // change time flow multiplier
+  const changeMultiplier = (multiplier) => {
+    viewerObject.clock.multiplier = multiplier;
   };
 
   // update predicted object position in a set moment of time
@@ -70,7 +65,8 @@ export default function Home() {
     newTime.secondsOfDay = Math.floor(newTime.secondsOfDay);
 
     if (!newTime.equals(lastTime)) {
-      const newDate = JulianDate.toDate(newTime)
+      const newDate = JulianDate.toDate(newTime);
+      setClockTime(newTime);
       lastTime = newTime;
 
       // Propagate objects
@@ -96,9 +92,9 @@ export default function Home() {
       terrainProvider: new CesiumTerrainProvider({
         url: IonResource.fromAssetId(1),
       }),
-      //animation: false,
+      animation: false,
       baseLayerPicker: false,
-      fullscreenButton: true,
+      fullscreenButton: false,
       vrButton: false,
       geocoder: false,
       homeButton: false,
@@ -111,16 +107,24 @@ export default function Home() {
       requestRenderMode: true
     });
 
-    viewer.clock.canAnimate = false; // do not start the clock
-    viewer.scene.debugShowFramesPerSecond = true;
+    viewer.scene.debugShowFramesPerSecond = true; // fps debugger
+    viewer.clock.canAnimate = false; // do not start the clock before the points are created
     viewer.resolutionScale = 0.7;
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 4e6; // max zoom in distance in meters
+    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 0.5e9; // max zoom out distance in meters
 
     // Calculate position and velocity from TLE data
-    const now = new Date();
-
+    const initialObjectCategories = [];
     const propagatedCategories = combinedTLE.map((category) => {
+      initialObjectCategories.push({
+        name: category.name,
+        color: category.color,
+        visible: true
+      });
+
       return {
-        data: propagateObjects(category.data, now),
+        data: propagateObjects(category.data, startTime),
+        name: category.name,
         color: category.color
       }
     });
@@ -153,13 +157,13 @@ export default function Home() {
     viewer.clock.canAnimate = true;
     viewer.clock.shouldAnimate = true;
 
+    setViewerObject(viewer);
+    setPointsCollectionObject(pointsCollection);
+    setObjectCategories(initialObjectCategories);
+
     // start updating the position of points based on clock time
     viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, allSatrecs, viewer.clock.currentTime));
-    
-    return () => {
-      pointsCollection.removeAll();
-    };
-  });
+  }, []);
 
   return (
     <div>
@@ -167,9 +171,19 @@ export default function Home() {
         <title>Satellite Tracker</title>
       </Head>
 
+      <Navigation
+        objectCategories={objectCategories}
+        changeCategoryVisibility={changeCategoryVisibility}
+      />
+      <TimeControls
+        clockTime={JulianDate.toDate(clockTime)}
+        handleMultiplierChange={changeMultiplier}
+      />
       <main>
         <div id="cesium-container" className="fullSize"></div>
       </main>
     </div>
   )
-}
+};
+
+export default Home;

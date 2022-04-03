@@ -62,8 +62,7 @@
     display: block;
     position: absolute;
     bottom: 0;
-    left: 0;
-    padding-right: 5px;
+    right: 0;
 }
 
 .cesium-widget-credits {
@@ -78,7 +77,7 @@
 }
 
 .cesium-viewer .cesium-widget-credits {
-    display: inline;
+    display: flex;
     position: static;
     bottom: auto;
     left: auto;
@@ -86,6 +85,8 @@
     color: #fff;
     font-size: 10px;
     text-shadow: 0 0 2px #000;
+    flex-direction: column-reverse;
+    text-align: right;
 }
 
 .cesium-credit-expand-link {
@@ -95,58 +96,12 @@
     color: #ffffff;
 }
 
-.cesium-credit-textContainer *, .cesium-credit-logoContainer * {
-    display: inline;
+.cesium-credit-textContainer {
+    display: none !important;
 }
 
 .cesium-widget-credits a, .cesium-widget-credits a:visited {
     color: #fff;
-}
-
-/* Fullscreen button */
-.cesium-viewer-fullscreenContainer {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding: 0;
-    width: 29px;
-    height: 29px;
-    overflow: hidden;
-}
-
-.cesium-button {
-    display: inline-block;
-    position: relative;
-    background: #303336;
-    border: 1px solid #444;
-    color: #edffff;
-    fill: #edffff;
-    border-radius: 4px;
-    padding: 5px 12px;
-    margin: 2px 3px;
-    cursor: pointer;
-    overflow: hidden;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.cesium-button.cesium-fullscreenButton {
-    display: block;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    border-radius: 0;
-}
-
-.cesium-svgPath-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
 }
 
 /* Main canvas */
@@ -202,10 +157,9 @@
     margin: 0;
 }
 
-/* Animation(time passage) */
-.cesium-animation-theme{visibility:hidden;display:block;position:absolute;z-index:-100}.cesium-animation-themeNormal{color:#222}.cesium-animation-themeHover{color:#4488b0}.cesium-animation-themeSelect{color:#242}.cesium-animation-themeDisabled{color:#333}.cesium-animation-themeKnob{color:#222}.cesium-animation-themePointer{color:#2e2}.cesium-animation-themeSwoosh{color:#8ac}.cesium-animation-themeSwooshHover{color:#aef}.cesium-animation-svgText{fill:#edffff;font-family:Sans-Serif;font-size:15px;text-anchor:middle}.cesium-animation-blank{fill:#000;fill-opacity:.01;stroke:none}.cesium-animation-rectButton{cursor:pointer;-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}.cesium-animation-rectButton .cesium-animation-buttonGlow{fill:#fff;stroke:none;display:none}.cesium-animation-rectButton:hover .cesium-animation-buttonGlow{display:block}.cesium-animation-rectButton .cesium-animation-buttonPath{fill:#edffff}.cesium-animation-rectButton .cesium-animation-buttonMain{stroke:#444;stroke-width:1.2}.cesium-animation-rectButton:hover .cesium-animation-buttonMain{stroke:#aef}.cesium-animation-rectButton:active .cesium-animation-buttonMain{fill:#abd6ff}.cesium-animation-buttonDisabled{-moz-user-select:none;-webkit-user-select:none;-ms-user-select:none;user-select:none}.cesium-animation-buttonDisabled .cesium-animation-buttonMain{stroke:#555}.cesium-animation-buttonDisabled .cesium-animation-buttonPath{fill:#818181}.cesium-animation-buttonDisabled .cesium-animation-buttonGlow{display:none}.cesium-animation-buttonToggled .cesium-animation-buttonGlow{display:block;fill:#2e2}.cesium-animation-buttonToggled .cesium-animation-buttonMain{stroke:#2e2}.cesium-animation-buttonToggled:hover .cesium-animation-buttonGlow{fill:#fff}.cesium-animation-buttonToggled:hover .cesium-animation-buttonMain{stroke:#2e2}.cesium-animation-shuttleRingG{cursor:pointer}.cesium-animation-shuttleRingPointer{cursor:pointer}.cesium-animation-shuttleRingPausePointer{cursor:pointer}.cesium-animation-shuttleRingBack{fill:#181818;fill-opacity:.8;stroke:#333;stroke-width:1.2}.cesium-animation-shuttleRingSwoosh line{stroke:#8ac;stroke-width:3;stroke-opacity:.2;stroke-linecap:round}.cesium-animation-knobOuter{cursor:pointer;stroke:#444;stroke-width:1.2}.cesium-animation-knobInner{cursor:pointer}
-.cesium-animation-themeNormal{color:#e5f2fe}.cesium-lighter .cesium-animation-themeHover{color:#abd6ff}.cesium-lighter .cesium-animation-themeSelect{color:#e5f2fe}.cesium-lighter .cesium-animation-themeDisabled{color:#efefef}.cesium-lighter .cesium-animation-themeKnob{color:#e1e2e3}.cesium-lighter .cesium-animation-themePointer{color:#fa5}.cesium-lighter .cesium-animation-themeSwoosh{color:#ace}.cesium-lighter .cesium-animation-themeSwooshHover{color:#bdf}.cesium-lighter .cesium-animation-svgText{fill:#111}.cesium-lighter .cesium-animation-rectButton .cesium-animation-buttonPath{fill:#111}.cesium-lighter .cesium-animation-rectButton .cesium-animation-buttonMain{stroke:#759dc0}.cesium-lighter .cesium-animation-buttonToggled .cesium-animation-buttonGlow{fill:#ffaa2a}.cesium-lighter .cesium-animation-buttonToggled .cesium-animation-buttonMain{stroke:#ea0}.cesium-lighter .cesium-animation-rectButton:hover .cesium-animation-buttonMain{stroke:#759dc0}.cesium-lighter .cesium-animation-buttonToggled:hover .cesium-animation-buttonGlow{fill:#fff}.cesium-lighter .cesium-animation-buttonToggled:hover .cesium-animation-buttonMain{stroke:#ea0}.cesium-lighter .cesium-animation-rectButton:active .cesium-animation-buttonMain{fill:#abd6ff}.cesium-lighter .cesium-animation-buttonDisabled .cesium-animation-buttonMain{stroke:#d3d3d3}.cesium-lighter .cesium-animation-buttonDisabled .cesium-animation-buttonPath{fill:#818181}.cesium-lighter .cesium-animation-shuttleRingBack{fill:#fafafa;fill-opacity:1;stroke:#aeaeae;stroke-width:1.2}.cesium-lighter .cesium-animation-shuttleRingSwoosh line{stroke:#8ac}.cesium-lighter .cesium-animation-knobOuter{stroke:#a5a5a5}
-
-.cesium-animation-rectButton .cesium-animation-buttonMain {
-    fill: rgb(40, 40, 40);
+/* turn off cesium attribution from the main screen */
+@media screen and (max-width: 1024px) {
+    .cesium-viewer-bottom {
+        display: none;
+    }
 }

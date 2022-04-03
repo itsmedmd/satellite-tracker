@@ -1,0 +1,35 @@
+.time-controls {
+    z-index: 1001;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 60%;
+    transform: translateX(-50%);
+    margin-bottom: 12px;
+    text-align: center;
+    max-width: 700px;
+}
+
+.time-range {
+    width: 100%;
+}
+
+.time-text-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.time-text {
+    margin: 0;
+    color: white;
+}
+
+.time-text-bold {
+    font-weight: bold;
+}
+
+@media screen and (max-width: 525px) {
+    .time-controls {
+        width: 70%;
+    }
+}
