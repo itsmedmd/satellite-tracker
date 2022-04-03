@@ -1,8 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import * as satellite from "satellite.js";
-import { combinedTLE } from "utils/combinedTLE";
-
 import {
   Viewer,
   CesiumTerrainProvider,
@@ -14,53 +12,13 @@ import {
   PointPrimitiveCollection
 } from "cesiumSource/Cesium";
 
-export default function Home() {
+import { combinedTLE } from "utils/combinedTLE";
+import createPropagatedArray from "utils/createPropagatedArray";
+import propagateObjects from "utils/propagateObjects";
+
+const Home = () => {
   let lastTime = null;
-
-  // Propagate an array of satrecs with provided time
-  const createPropagatedArray = (satrecs, now) => {
-    const results = [];
-
-    satrecs.forEach((record) => {
-      if (record) { 
-        const propagated = satellite.propagate(
-          record,
-          now.getUTCFullYear(),
-          now.getUTCMonth() + 1, // month has to be in range from 1 to 12
-          now.getUTCDate(),
-          now.getUTCHours(),
-          now.getUTCMinutes(),
-          now.getUTCSeconds()
-        );
-
-        if (propagated.position && propagated.velocity) {
-          results.push(propagated);
-        }
-      }
-    });
-
-    return results;
-  };
-
-  // calculate position and velocity of each object from TLE data
-  const propagateObjects = (data, now) => {
-    const satrecs = [];
-
-    // transform TLE data to satrec data
-    let j = 0;
-    for (let i=0; i < data.length; i++) {
-      const tle1 = data[j];
-      const tle2 = data[j + 1];
-      if (typeof tle1 == 'string' && typeof tle2 == 'string') {
-        satrecs.push(satellite.twoline2satrec(tle1, tle2));
-      }
-      j = j + 2;
-    }
-
-    // Propagate objects
-    const results = createPropagatedArray(satrecs, now);
-    return { results, satrecs };
-  };
+  //const [lastTime, setLastTime] = useState(null);
 
   // update predicted object position in a set moment of time
   const updatePosition = (pointsCollection, satrecs, currentTime) => {
@@ -123,7 +81,8 @@ export default function Home() {
     const propagatedCategories = combinedTLE.map((category) => {
       return {
         data: propagateObjects(category.data, now),
-        color: category.color
+        color: category.color,
+        name: category.name
       }
     });
 
@@ -157,10 +116,6 @@ export default function Home() {
 
     // start updating the position of points based on clock time
     viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, allSatrecs, viewer.clock.currentTime));
-    
-    return () => {
-      pointsCollection.removeAll();
-    };
   });
 
   return (
@@ -174,4 +129,6 @@ export default function Home() {
       </main>
     </div>
   )
-}
+};
+
+export default Home;

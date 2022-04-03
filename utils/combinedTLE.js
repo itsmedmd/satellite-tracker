@@ -81,6 +81,7 @@ const miscellaneousColor = CesiumColor.OLDLACE;
 const starlinkColor = CesiumColor.YELLOW;
 
 const debris = {
+    name: "Debris",
     color: debrisColor,
     data: [
         ...russianASATDebrisTLE,
@@ -92,6 +93,7 @@ const debris = {
 };
 
 const specialInterest = {
+    name: "Special interest",
     color: specialInterestColor,
     data: [
         ...spaceStationsTLE,
@@ -102,6 +104,7 @@ const specialInterest = {
 };
 
 const weatherEarth = {
+    name: "Weather and Earth resources",
     color: weatherEarthColor,
     data: [
         ...weatherTLE,
@@ -118,6 +121,7 @@ const weatherEarth = {
 };
 
 const communications = {
+    name: "Communications",
     color: communicationsColor,
     data: [
         ...activeGeosynchronousTLE,
@@ -142,6 +146,7 @@ const communications = {
 };
 
 const starlink = {
+    name: "Starlink",
     color: starlinkColor,
     data: [
         ...starlinkTLE
@@ -149,6 +154,7 @@ const starlink = {
 };
 
 const navigation = {
+    name: "Navigation",
     color: navigationColor,
     data: [
         ...gnssTLE,
@@ -163,6 +169,7 @@ const navigation = {
 };
 
 const scientific = {
+    name: "Scientific",
     color: scientificColor,
     data: [
         ...educationTLE,
@@ -173,6 +180,7 @@ const scientific = {
 };
 
 const miscellaneous = {
+    name: "Miscellaneous",
     color: miscellaneousColor,
     data: [
         ...miscellaneousMilitaryTLE,
