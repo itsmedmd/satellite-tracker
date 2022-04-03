@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import {
   Viewer,
@@ -22,7 +22,35 @@ const Home = () => {
   const startTime = new Date();
   const [clockTime, setClockTime] = useState(startTime);
   const [viewerObject, setViewerObject] = useState(null);
+  const [pointsCollectionObject, setPointsCollectionObject] = useState(null);
+  const [objectCategories, setObjectCategories] = useState([]);
   let lastTime = null;
+
+  // toggle points visibility of a specified category
+  const changePointsVisibility = (category) => {
+    for (let i = 0; i < pointsCollectionObject.length; i++) {
+      const point = pointsCollectionObject.get(i);
+      if (point.color.red === category.color.red &&
+          point.color.green === category.color.green &&
+          point.color.blue === category.color.blue) {
+        point.show = !point.show;
+      }
+    }
+  };
+
+  // toggle visibility of a specified category 
+  const changeCategoryVisibility = useCallback((name) => {
+    const newCategories = [...objectCategories];
+    let changedCategory = null;
+    newCategories.forEach((category) => {
+      if (category.name === name) {
+        changedCategory = category;
+        category.visible = !category.visible;
+      }
+    });
+    setObjectCategories(newCategories);
+    changePointsVisibility(changedCategory);
+  }, [objectCategories]);
 
   // change time flow multiplier
   const changeMultiplier = (multiplier) => {
@@ -86,11 +114,18 @@ const Home = () => {
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 0.5e9; // max zoom out distance in meters
 
     // Calculate position and velocity from TLE data
+    const initialObjectCategories = [];
     const propagatedCategories = combinedTLE.map((category) => {
+      initialObjectCategories.push({
+        name: category.name,
+        color: category.color,
+        visible: true
+      });
+
       return {
         data: propagateObjects(category.data, startTime),
-        color: category.color,
-        name: category.name
+        name: category.name,
+        color: category.color
       }
     });
 
@@ -124,6 +159,8 @@ const Home = () => {
     viewer.clock.multiplier = 1;
 
     setViewerObject(viewer);
+    setPointsCollectionObject(pointsCollection);
+    setObjectCategories(initialObjectCategories);
 
     // start updating the position of points based on clock time
     viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, allSatrecs, viewer.clock.currentTime));
@@ -135,7 +172,10 @@ const Home = () => {
         <title>Satellite Tracker</title>
       </Head>
 
-      <Navigation />
+      <Navigation
+        objectCategories={objectCategories}
+        changeCategoryVisibility={changeCategoryVisibility}
+      />
       <TimeControls
         clockTime={JulianDate.toDate(clockTime)}
         handleMultiplierChange={changeMultiplier}
