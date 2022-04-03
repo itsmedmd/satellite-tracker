@@ -156,7 +156,6 @@ const Home = () => {
     // start the clock and set options for it
     viewer.clock.canAnimate = true;
     viewer.clock.shouldAnimate = true;
-    viewer.clock.multiplier = 1;
 
     setViewerObject(viewer);
     setPointsCollectionObject(pointsCollection);

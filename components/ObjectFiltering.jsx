@@ -9,8 +9,6 @@ const ObjectFiltering = ({ objectCategories, changeCategoryVisibility }) => {
     };
 
     const renderCategories = () => {
-        //console.log(categories[0].color);
-        
         return categories.map((category) => 
             <li key={category.name} className={styles["list-item"]}>
                 <input
