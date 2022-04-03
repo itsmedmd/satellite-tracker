@@ -111,9 +111,11 @@ export default function Home() {
       requestRenderMode: true
     });
 
-    viewer.clock.canAnimate = false; // do not start the clock
-    viewer.scene.debugShowFramesPerSecond = true;
+    viewer.scene.debugShowFramesPerSecond = true; // fps debugger
+    viewer.clock.canAnimate = false; // do not start the clock before the points are created
     viewer.resolutionScale = 0.7;
+    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 4e6; // max zoom in distance in meters
+    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 0.5e9; // max zoom out distance in meters
 
     // Calculate position and velocity from TLE data
     const now = new Date();
