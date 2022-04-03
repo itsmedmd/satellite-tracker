@@ -1,5 +1,5 @@
-import "../styles/globals.css";
-import "../styles/cesium.css";
+import "styles/globals.css";
+import "styles/cesium.css";
 
 const MyApp = ({ Component, pageProps }) => {
   return <Component {...pageProps} />

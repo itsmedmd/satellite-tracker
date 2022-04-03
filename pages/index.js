@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
-import * as satellite from "satellite.js";
 import {
   Viewer,
   CesiumTerrainProvider,
@@ -16,9 +15,19 @@ import { combinedTLE } from "utils/combinedTLE";
 import createPropagatedArray from "utils/createPropagatedArray";
 import propagateObjects from "utils/propagateObjects";
 
+import Navigation from "components/Navigation";
+import TimeControls from "components/TimeControls";
+
 const Home = () => {
+  const startTime = new Date();
+  const [clockTime, setClockTime] = useState(startTime);
+  const [viewerObject, setViewerObject] = useState(null);
   let lastTime = null;
-  //const [lastTime, setLastTime] = useState(null);
+
+  // change time flow multiplier
+  const changeMultiplier = (multiplier) => {
+    viewerObject.clock.multiplier = multiplier;
+  };
 
   // update predicted object position in a set moment of time
   const updatePosition = (pointsCollection, satrecs, currentTime) => {
@@ -28,7 +37,8 @@ const Home = () => {
     newTime.secondsOfDay = Math.floor(newTime.secondsOfDay);
 
     if (!newTime.equals(lastTime)) {
-      const newDate = JulianDate.toDate(newTime)
+      const newDate = JulianDate.toDate(newTime);
+      setClockTime(newTime);
       lastTime = newTime;
 
       // Propagate objects
@@ -54,9 +64,9 @@ const Home = () => {
       terrainProvider: new CesiumTerrainProvider({
         url: IonResource.fromAssetId(1),
       }),
-      //animation: false,
+      animation: false,
       baseLayerPicker: false,
-      fullscreenButton: true,
+      fullscreenButton: false,
       vrButton: false,
       geocoder: false,
       homeButton: false,
@@ -76,11 +86,9 @@ const Home = () => {
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 0.5e9; // max zoom out distance in meters
 
     // Calculate position and velocity from TLE data
-    const now = new Date();
-
     const propagatedCategories = combinedTLE.map((category) => {
       return {
-        data: propagateObjects(category.data, now),
+        data: propagateObjects(category.data, startTime),
         color: category.color,
         name: category.name
       }
@@ -113,10 +121,13 @@ const Home = () => {
     // start the clock and set options for it
     viewer.clock.canAnimate = true;
     viewer.clock.shouldAnimate = true;
+    viewer.clock.multiplier = 1;
+
+    setViewerObject(viewer);
 
     // start updating the position of points based on clock time
     viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, allSatrecs, viewer.clock.currentTime));
-  });
+  }, []);
 
   return (
     <div>
@@ -124,6 +135,11 @@ const Home = () => {
         <title>Satellite Tracker</title>
       </Head>
 
+      <Navigation />
+      <TimeControls
+        clockTime={JulianDate.toDate(clockTime)}
+        handleMultiplierChange={changeMultiplier}
+      />
       <main>
         <div id="cesium-container" className="fullSize"></div>
       </main>
