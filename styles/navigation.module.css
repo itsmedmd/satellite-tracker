@@ -1,5 +1,4 @@
-.navigation,
-.nav-toggle {
+.navigation {
     color: white;
     position: absolute;
     top: 0;
@@ -7,24 +6,67 @@
 }
 
 .navigation {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.6);
     border-right: 1px solid rgba(255, 255, 255, 0.7);
     border-bottom: 1px solid rgba(255, 255, 255, 0.7);
     height: 80vh;
     width: 20%;
-    padding-top: 64px;
-    padding: 64px 8px 0;
+    padding: 8px 8px 32px;
     display: flex;
     flex-direction: column;
     z-index: 1000;
+    min-width: 290px;
+}
+
+.nav-toggle,
+.about-page-title {
+    border: 0;
+    background-color: white;
+    padding: 4px 16px;
+    cursor: pointer;
+}
+
+.nav-toggle:hover,
+.about-page-title:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-toggle:active,
+.about-page-title:active {
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .nav-toggle {
     z-index: 1001;
+    font-size: 24px;
+    position: relative;
+    top: 16px;
+    left: 8px;
 }
 
-@media screen and (max-width: 1280px) {
+.about-page-title {
+    margin-top: 24px;
+    font-size: 20px;
+}
+
+.nav-toggle.nav-open {
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+@media screen and (max-width: 425px) {
     .navigation {
-        width: 260px;
+        width: 100%;
+        border-right: 0;
+        min-width: 0;
+    }
+}
+
+@media screen and (max-height: 525px) {
+    .navigation {
+        min-height: 100vh;
+        border-bottom: 0;
+        overflow-y: scroll;
     }
 }

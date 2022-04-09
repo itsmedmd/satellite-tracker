@@ -162,12 +162,12 @@
     .cesium-viewer-bottom {
         display: none;
         right: initial;
+        bottom: 46px !important;
         left: 0;
-        bottom: 20vh !important;
         z-index: 1001;
     }
 
-    .nav-open .cesium-viewer-bottom {
+    /* .nav-open .cesium-viewer-bottom {
         display: block;
-    }
+    } */
 }

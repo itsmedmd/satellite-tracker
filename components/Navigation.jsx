@@ -16,18 +16,32 @@ const Navigation = ({ objectCategories, changeCategoryVisibility, handleNavToggl
 
     return (
         <>
-            <div className={styles["nav-toggle"]}>
-                <button onClick={toggleNav}>Toggle Navigation</button>
-            </div>
             {
-                navVisible &&
+                navVisible ?
                 <div className={styles["navigation"]}>
-                    <button onClick={openAboutPage}>Learn about this project</button>
+                    <button
+                        onClick={toggleNav}
+                        className={`${styles["nav-toggle"]} ${navVisible ? styles["nav-open"]: ""}`}
+                    >
+                        Close options
+                    </button>
+                    <button
+                        onClick={openAboutPage}
+                        className={styles["about-page-title"]}
+                    >
+                        Learn about this project
+                    </button>
                     <ObjectFiltering
                         objectCategories={objectCategories}
                         changeCategoryVisibility={changeCategoryVisibility}
                     />
-                </div>
+                </div> :
+                <button
+                    onClick={toggleNav}
+                    className={`${styles["nav-toggle"]} ${navVisible ? styles["nav-open"]: ""}`}
+                >
+                    Options
+                </button>
             }
         </>
     );

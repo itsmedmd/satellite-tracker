@@ -33,3 +33,9 @@
         width: 70%;
     }
 }
+
+@media screen and (max-height: 525px) {
+    .time-controls.nav-open {
+        display: none;
+    }
+}

@@ -173,7 +173,7 @@ const Home = () => {
   return (
     <div>
       <Head>
-        <title>Satellite Tracker</title>
+        <title>Deimantas Butėnas - Satellite Tracker</title>
       </Head>
 
       <Navigation
@@ -184,6 +184,7 @@ const Home = () => {
       <TimeControls
         clockTime={JulianDate.toDate(clockTime)}
         handleMultiplierChange={changeMultiplier}
+        isNavOpen={isNavOpen}
       />
       <main>
         <div id="cesium-container" className={`fullSize ${isNavOpen && 'nav-open'}`}></div>

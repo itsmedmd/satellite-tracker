@@ -1,9 +1,10 @@
 .object-filtering {
-    
+    margin-top: 50px;
 }
 
 .title {
-
+    font-size: 20px;
+    margin-bottom: 8px;
 }
 
 .list {
@@ -14,4 +15,5 @@
 
 .list-item {
     margin-bottom: 6px;
+    font-size: 18px;
 }
