@@ -114,7 +114,7 @@
 /* Data attribution information modal */
 .cesium-credit-lightbox-overlay {
     display: none;
-    z-index: 1;
+    z-index: 1001;
     position: absolute;
     top: 0;
     left: 0;
@@ -158,8 +158,16 @@
 }
 
 /* turn off cesium attribution from the main screen */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 800px) {
     .cesium-viewer-bottom {
         display: none;
+        right: initial;
+        left: 0;
+        bottom: 20vh !important;
+        z-index: 1001;
+    }
+
+    .nav-open .cesium-viewer-bottom {
+        display: block;
     }
 }

@@ -7,10 +7,13 @@
 }
 
 .navigation {
-    background-color: rgba(240, 248, 255, 0.3);
-    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-right: 1px solid rgba(255, 255, 255, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+    height: 80vh;
     width: 20%;
     padding-top: 64px;
+    padding: 64px 8px 0;
     display: flex;
     flex-direction: column;
     z-index: 1000;
@@ -18,4 +21,10 @@
 
 .nav-toggle {
     z-index: 1001;
+}
+
+@media screen and (max-width: 1280px) {
+    .navigation {
+        width: 260px;
+    }
 }

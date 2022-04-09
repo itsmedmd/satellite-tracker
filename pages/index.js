@@ -24,6 +24,7 @@ const Home = () => {
   const [viewerObject, setViewerObject] = useState(null);
   const [pointsCollectionObject, setPointsCollectionObject] = useState(null);
   const [objectCategories, setObjectCategories] = useState([]);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   let lastTime = null;
 
   // toggle points visibility of a specified category
@@ -37,6 +38,10 @@ const Home = () => {
       }
     }
   };
+
+  const handleNavToggle = useCallback((value) => {
+    setIsNavOpen(value);
+  }, [isNavOpen]);
 
   // toggle visibility of a specified category 
   const changeCategoryVisibility = useCallback((name) => {
@@ -174,13 +179,14 @@ const Home = () => {
       <Navigation
         objectCategories={objectCategories}
         changeCategoryVisibility={changeCategoryVisibility}
+        handleNavToggle={handleNavToggle}
       />
       <TimeControls
         clockTime={JulianDate.toDate(clockTime)}
         handleMultiplierChange={changeMultiplier}
       />
       <main>
-        <div id="cesium-container" className="fullSize"></div>
+        <div id="cesium-container" className={`fullSize ${isNavOpen && 'nav-open'}`}></div>
       </main>
     </div>
   )
