@@ -18,8 +18,9 @@
     min-width: 300px;
 }
 
+/* navigation buttons */
 .nav-toggle,
-.about-page-title {
+.about-page-toggle {
     border: 0;
     background-color: white;
     padding: 4px 16px;
@@ -27,12 +28,12 @@
 }
 
 .nav-toggle:hover,
-.about-page-title:hover {
+.about-page-toggle:hover {
     background-color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-toggle:active,
-.about-page-title:active {
+.about-page-toggle:active {
     background-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -44,15 +45,23 @@
     left: 8px;
 }
 
-.about-page-title {
+.about-page-toggle {
     margin-top: 24px;
     font-size: 20px;
+    max-width: 300px;
 }
 
+/* when nav or about page is open */
 .nav-toggle.nav-open {
     width: 100%;
     top: 0;
     left: 0;
+}
+
+.about-open {
+    border: 0;
+    width: 100vw;
+    min-height: 100vh;
 }
 
 @media screen and (max-width: 425px) {
@@ -63,7 +72,7 @@
     }
 }
 
-@media screen and (max-height: 525px) {
+@media screen and (max-height: 600px) {
     .navigation {
         min-height: 100vh;
         border-bottom: 0;

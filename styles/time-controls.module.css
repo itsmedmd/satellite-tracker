@@ -28,13 +28,18 @@
     font-weight: bold;
 }
 
+/* when about page in navigation is open*/
+.time-controls.about-open {
+    display: none;
+}
+
 @media screen and (max-width: 525px) {
     .time-controls {
-        width: 70%;
+        width: 80%;
     }
 }
 
-@media screen and (max-height: 525px) {
+@media screen and (max-height: 600px) {
     .time-controls.nav-open {
         display: none;
     }

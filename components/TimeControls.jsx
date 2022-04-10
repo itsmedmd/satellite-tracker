@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 
 import styles from "styles/time-controls.module.css";
 
-const TimeControls = ({clockTime, handleMultiplierChange, isNavOpen}) => {
-    const [timeMultiplier, setTimeMultiplier] = useState(1);
+const TimeControls = ({
+    clockTime,
+    handleMultiplierChange,
+    isNavOpen,
+    isAboutOpen
+}) => {
+    const [timeMultiplier, setTimeMultiplier] = useState(0);
     const [currentTime, setCurrentTime] = useState(null);
 
     const handleTimeChange = (e) => {
@@ -28,7 +33,13 @@ const TimeControls = ({clockTime, handleMultiplierChange, isNavOpen}) => {
     }, [clockTime]);
 
     return (
-        <div className={`${styles["time-controls"]} ${isNavOpen ? styles["nav-open"] : ""}`}>
+        <div
+            className={`
+                ${styles["time-controls"]}
+                ${isNavOpen ? styles["nav-open"] : ""}
+                ${isAboutOpen ? styles["about-open"] : ""}
+            `}
+        >
             <div className={styles["time-text-container"]}>
                 <p className={styles["time-text"]}>
                     {

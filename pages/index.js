@@ -25,6 +25,7 @@ const Home = () => {
   const [pointsCollectionObject, setPointsCollectionObject] = useState(null);
   const [objectCategories, setObjectCategories] = useState([]);
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   let lastTime = null;
 
   // toggle points visibility of a specified category
@@ -37,11 +38,19 @@ const Home = () => {
         point.show = !point.show;
       }
     }
+    // re-render the scene in case the clock (constant re-rendering) is stopped
+    viewerObject.scene.render();
   };
 
+  // navigation has been toggled
   const handleNavToggle = useCallback((value) => {
     setIsNavOpen(value);
   }, [isNavOpen]);
+  
+  // about page in navigation has been toggled
+  const handleAboutToggle = useCallback((value) => {
+    setIsAboutOpen(value);
+  }, [isAboutOpen]);
 
   // toggle visibility of a specified category 
   const changeCategoryVisibility = useCallback((name) => {
@@ -114,6 +123,7 @@ const Home = () => {
 
     viewer.scene.debugShowFramesPerSecond = true; // fps debugger
     viewer.clock.canAnimate = false; // do not start the clock before the points are created
+    viewer.clock.multiplier = 0; // set initial clock as stopped
     viewer.resolutionScale = 0.7;
     viewer.scene.screenSpaceCameraController.minimumZoomDistance = 4e6; // max zoom in distance in meters
     viewer.scene.screenSpaceCameraController.maximumZoomDistance = 0.5e9; // max zoom out distance in meters
@@ -180,11 +190,13 @@ const Home = () => {
         objectCategories={objectCategories}
         changeCategoryVisibility={changeCategoryVisibility}
         handleNavToggle={handleNavToggle}
+        handleAboutToggle={handleAboutToggle}
       />
       <TimeControls
         clockTime={JulianDate.toDate(clockTime)}
         handleMultiplierChange={changeMultiplier}
         isNavOpen={isNavOpen}
+        isAboutOpen={isAboutOpen}
       />
       <main>
         <div id="cesium-container" className={`fullSize ${isNavOpen && 'nav-open'}`}></div>

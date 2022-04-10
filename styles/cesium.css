@@ -61,8 +61,9 @@
 .cesium-viewer-bottom {
     display: block;
     position: absolute;
-    bottom: 0;
     right: 0;
+    left: initial !important;
+    z-index: 1001;
 }
 
 .cesium-widget-credits {
@@ -114,7 +115,7 @@
 /* Data attribution information modal */
 .cesium-credit-lightbox-overlay {
     display: none;
-    z-index: 1001;
+    z-index: 1002;
     position: absolute;
     top: 0;
     left: 0;
