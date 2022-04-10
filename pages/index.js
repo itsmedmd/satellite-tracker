@@ -199,7 +199,14 @@ const Home = () => {
         isAboutOpen={isAboutOpen}
       />
       <main>
-        <div id="cesium-container" className={`fullSize ${isNavOpen && 'nav-open'}`}></div>
+        <div
+          id="cesium-container"
+          className={`
+            fullSize
+            ${isNavOpen && 'nav-open'}
+            ${isAboutOpen && 'about-open'}
+          `}
+        ></div>
       </main>
     </div>
   )

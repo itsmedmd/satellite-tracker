@@ -20,6 +20,11 @@
     align-items: center;
 }
 
+.list-item label,
+.list-item input {
+    cursor: pointer;
+}
+
 .circle {
     display: inline-block;
     width: 8px;

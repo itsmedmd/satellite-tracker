@@ -6,7 +6,7 @@
 }
 
 .navigation {
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
     border-right: 1px solid rgba(255, 255, 255, 0.7);
     border-bottom: 1px solid rgba(255, 255, 255, 0.7);
     height: 80vh;
@@ -48,7 +48,6 @@
 .about-page-toggle {
     margin-top: 24px;
     font-size: 20px;
-    max-width: 300px;
 }
 
 /* when nav or about page is open */
@@ -62,6 +61,11 @@
     border: 0;
     width: 100vw;
     min-height: 100vh;
+    padding: 0;
+}
+
+.about-open .about-page-toggle {
+    max-width: 409px;
 }
 
 @media screen and (max-width: 425px) {
@@ -76,6 +80,12 @@
     .navigation {
         min-height: 100vh;
         border-bottom: 0;
+        overflow-y: scroll;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .navigation {
         overflow-y: scroll;
     }
 }
