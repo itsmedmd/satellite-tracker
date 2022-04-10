@@ -1,0 +1,21 @@
+.about {
+    width: 100vw;
+    height: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 48px 16px 0;
+    text-align: justify;
+}
+
+.content {
+    font-size: 20px;
+    padding-bottom: 48px;
+}
+
+.content p {
+    margin: 28px 0;
+}
+
+.content a {
+    color: rgb(0, 209, 192);
+}

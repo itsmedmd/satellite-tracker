@@ -2,16 +2,28 @@ import { useEffect, useState } from "react";
 
 import styles from "styles/time-controls.module.css";
 
-const TimeControls = ({clockTime, handleMultiplierChange}) => {
-    const [timeMultiplier, setTimeMultiplier] = useState(1);
+const TimeControls = ({
+    clockTime,
+    handleMultiplierChange,
+    isNavOpen,
+    isAboutOpen
+}) => {
+    const [timeMultiplier, setTimeMultiplier] = useState(0);
     const [currentTime, setCurrentTime] = useState(null);
 
     const handleTimeChange = (e) => {
-        // calculate exponentially rising multiplier
-        let multiplier = Math.round(Math.exp((Math.log(10000)/100) * Math.abs(e.target.value)));
-        if (e.target.value < 0) {
-            multiplier = multiplier * -1;
+        let multiplier = 0;
+        if (Math.abs(e.target.value) < 2) {
+            // set time as stopped
+            multiplier = 0;
+        } else {
+            // calculate exponentially rising multiplier
+            multiplier = Math.round(Math.exp((Math.log(10000)/100) * Math.abs(e.target.value)));
+            if (e.target.value < 0) {
+                multiplier = multiplier * -1;
+            }
         }
+
         setTimeMultiplier(multiplier);
         handleMultiplierChange(multiplier);
     };
@@ -21,7 +33,13 @@ const TimeControls = ({clockTime, handleMultiplierChange}) => {
     }, [clockTime]);
 
     return (
-        <div className={styles["time-controls"]}>
+        <div
+            className={`
+                ${styles["time-controls"]}
+                ${isNavOpen ? styles["nav-open"] : ""}
+                ${isAboutOpen ? styles["about-open"] : ""}
+            `}
+        >
             <div className={styles["time-text-container"]}>
                 <p className={styles["time-text"]}>
                     {
@@ -32,7 +50,13 @@ const TimeControls = ({clockTime, handleMultiplierChange}) => {
                 </p>
                 <p className={styles["time-text"]}>
                     Time flow multiplier:
-                    <span className={styles["time-text-bold"]}> { timeMultiplier }x</span>
+                    <span className={styles["time-text-bold"]}>
+                        {
+                            timeMultiplier === 0 ?
+                            " 0x (Stopped)" :
+                            ` ${timeMultiplier}x`
+                        }
+                    </span>
                 </p>
             </div>
             <input

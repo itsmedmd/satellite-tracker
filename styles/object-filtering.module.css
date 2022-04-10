@@ -1,9 +1,10 @@
 .object-filtering {
-    
+    margin-top: 50px;
 }
 
 .title {
-
+    font-size: 20px;
+    margin-bottom: 8px;
 }
 
 .list {
@@ -14,4 +15,26 @@
 
 .list-item {
     margin-bottom: 6px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.list-item label,
+.list-item input {
+    cursor: pointer;
+}
+
+.circle {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 100%;
+    margin: 0 5px 0 4px;
+}
+
+@media screen and (max-width: 300px) {
+    .list {
+        padding-left: 0;
+    }
 }
