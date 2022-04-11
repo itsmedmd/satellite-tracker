@@ -2,10 +2,9 @@ import { useEffect, useState, useCallback } from 'react';
 import Head from 'next/head';
 import {
   Viewer,
-  CesiumTerrainProvider,
-  Ion,
-  IonResource,
+  IonImageryProvider,
   Cartesian3,
+  Ion,
   NearFarScalar,
   JulianDate,
   PointPrimitiveCollection
@@ -18,7 +17,16 @@ import propagateObjects from "utils/propagateObjects";
 import Navigation from "components/Navigation";
 import TimeControls from "components/TimeControls";
 
-const Home = () => {
+export async function getStaticProps() {
+  const token = process.env.CESIUM_TOKEN;
+  return {
+    props: {
+      token
+    },
+  }
+}
+
+const Home = ({token}) => {
   const startTime = new Date();
   const [clockTime, setClockTime] = useState(startTime);
   const [viewerObject, setViewerObject] = useState(null);
@@ -41,7 +49,7 @@ const Home = () => {
     // re-render the scene in case the clock (constant re-rendering) is stopped
     viewerObject.scene.render();
   };
-
+new IonImageryProvider({ assetId: 3845 })
   // navigation has been toggled
   const handleNavToggle = useCallback((value) => {
     setIsNavOpen(value);
@@ -99,86 +107,90 @@ const Home = () => {
   }; 
 
   useEffect(() => {
-    // Create 3D Cesium viewer
-    Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiODM0ODNmMS0wMmZjLTRiNTUtODAxMy0yMWZlMmI5OWE0ZDAiLCJpZCI6ODQ0ODMsImlhdCI6MTY0NjMxNzk4MX0.uVpY8O0Gg7Q3hjFtCfDksBL_4FCvj9AplE6qGK117K4";
+    if (token) {
+      Ion.defaultAccessToken = token;
 
-    const viewer = new Viewer("cesium-container", {
-      terrainProvider: new CesiumTerrainProvider({
-        url: IonResource.fromAssetId(1),
-      }),
-      animation: false,
-      baseLayerPicker: false,
-      fullscreenButton: false,
-      vrButton: false,
-      geocoder: false,
-      homeButton: false,
-      infoBox: false,
-      sceneModePicker: false,
-      selectionIndicator: false,
-      timeline: false,
-      navigationHelpButton: false,
-      targetFrameRate: 60,
-      requestRenderMode: true
-    });
-
-    viewer.scene.debugShowFramesPerSecond = true; // fps debugger
-    viewer.clock.canAnimate = false; // do not start the clock before the points are created
-    viewer.clock.multiplier = 0; // set initial clock as stopped
-    viewer.resolutionScale = 0.7;
-    viewer.scene.screenSpaceCameraController.minimumZoomDistance = 4e6; // max zoom in distance in meters
-    viewer.scene.screenSpaceCameraController.maximumZoomDistance = 0.5e9; // max zoom out distance in meters
-
-    // Calculate position and velocity from TLE data
-    const initialObjectCategories = [];
-    const propagatedCategories = combinedTLE.map((category) => {
-      initialObjectCategories.push({
-        name: category.name,
-        color: category.color,
-        visible: true
+      const viewer = new Viewer("cesium-container", {
+        imageryProvider: false,
+        animation: false,
+        baseLayerPicker: false,
+        fullscreenButton: false,
+        vrButton: false,
+        geocoder: false,
+        homeButton: false,
+        infoBox: false,
+        sceneModePicker: false,
+        selectionIndicator: false,
+        timeline: false,
+        navigationHelpButton: false,
+        targetFrameRate: 60,
+        requestRenderMode: true,
+        maximumScreenSpaceError: 32
       });
 
-      return {
-        data: propagateObjects(category.data, startTime),
-        name: category.name,
-        color: category.color
-      }
-    });
-
-    const km = 1000; // need to multiply each coordinate by 1000 to get km
-    let allSatrecs = [];
-    const pointsCollection = viewer.scene.primitives.add(new PointPrimitiveCollection());
-
-    // Create entities in 3D viewer for each object
-    propagatedCategories.forEach((category) => {
-      // append satrecs for category to all satrecs variable
-      allSatrecs = allSatrecs.concat(category.data.satrecs);
-
-      // create 3D entities with category color
-      category.data.results.forEach((obj) => 
-        pointsCollection.add({
-          position: new Cartesian3(obj.position.x * km, obj.position.y * km, obj.position.z * km),
-          color: category.color,
-          pixelSize: 2,
-          scaleByDistance: new NearFarScalar(8e6, 1.5, 11e6, 1),
-          translucencyByDistance: new NearFarScalar(4e7, 1, 1e9, 0)
-        })
+      viewer.imageryLayers.addImageryProvider(
+        new IonImageryProvider({ assetId: 3845 })
       );
-    });
 
-    // render scene with initial points
-    viewer.scene.render();
+      viewer.scene.debugShowFramesPerSecond = true; // fps debugger
+      viewer.clock.canAnimate = false; // do not start the clock before the points are created
+      viewer.clock.multiplier = 0; // set initial clock as stopped
+      viewer.resolutionScale = 0.7;
+      viewer.scene.screenSpaceCameraController.minimumZoomDistance = 4e6; // max zoom in distance in meters
+      viewer.scene.screenSpaceCameraController.maximumZoomDistance = 0.5e9; // max zoom out distance in meters
 
-    // start the clock and set options for it
-    viewer.clock.canAnimate = true;
-    viewer.clock.shouldAnimate = true;
+      // Calculate position and velocity from TLE data
+      const initialObjectCategories = [];
+      const propagatedCategories = combinedTLE.map((category) => {
+        initialObjectCategories.push({
+          name: category.name,
+          color: category.color,
+          visible: true
+        });
 
-    setViewerObject(viewer);
-    setPointsCollectionObject(pointsCollection);
-    setObjectCategories(initialObjectCategories);
+        return {
+          data: propagateObjects(category.data, startTime),
+          name: category.name,
+          color: category.color
+        }
+      });
 
-    // start updating the position of points based on clock time
-    viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, allSatrecs, viewer.clock.currentTime));
-  }, []);
+      const km = 1000; // need to multiply each coordinate by 1000 to get km
+      let allSatrecs = [];
+      const pointsCollection = viewer.scene.primitives.add(new PointPrimitiveCollection());
+
+      // Create entities in 3D viewer for each object
+      propagatedCategories.forEach((category) => {
+        // append satrecs for category to all satrecs variable
+        allSatrecs = allSatrecs.concat(category.data.satrecs);
+
+        // create 3D entities with category color
+        category.data.results.forEach((obj) => 
+          pointsCollection.add({
+            position: new Cartesian3(obj.position.x * km, obj.position.y * km, obj.position.z * km),
+            color: category.color,
+            pixelSize: 2,
+            scaleByDistance: new NearFarScalar(8e6, 1.5, 11e6, 1),
+            translucencyByDistance: new NearFarScalar(4e7, 1, 1e9, 0)
+          })
+        );
+      });
+
+      // render scene with initial points
+      viewer.scene.render();
+
+      // start the clock and set options for it
+      viewer.clock.canAnimate = true;
+      viewer.clock.shouldAnimate = true;
+
+      setViewerObject(viewer);
+      setPointsCollectionObject(pointsCollection);
+      setObjectCategories(initialObjectCategories);
+
+      // start updating the position of points based on clock time
+      viewer.scene.preRender.addEventListener(() => updatePosition(pointsCollection, allSatrecs, viewer.clock.currentTime));
+    }
+  }, [token]);
 
   return (
     <div>
