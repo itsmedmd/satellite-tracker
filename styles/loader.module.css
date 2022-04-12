@@ -1,0 +1,12 @@
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    background-color: darkgrey;
+    font-size: 48px;
+    color: white;
+    font-weight: bold;
+    width: 100vw;
+    height: 100vh;
+}

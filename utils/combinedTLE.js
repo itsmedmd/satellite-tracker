@@ -212,4 +212,4 @@ const combinedTLE = [
     starlink
 ];
 
-export { combinedTLE };
+export default combinedTLE;
