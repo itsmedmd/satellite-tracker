@@ -16,6 +16,7 @@ import propagateObjects from "utils/propagateObjects";
 
 import Navigation from "components/Navigation";
 import TimeControls from "components/TimeControls";
+import Layout from "components/Layout";
 
 export async function getStaticProps() {
   const token = process.env.CESIUM_TOKEN;
@@ -47,9 +48,9 @@ const Home = ({token}) => {
       }
     }
     // re-render the scene in case the clock (constant re-rendering) is stopped
-    viewerObject.scene.render();
+    viewerObject.scene.requestRender();
   };
-new IonImageryProvider({ assetId: 3845 })
+
   // navigation has been toggled
   const handleNavToggle = useCallback((value) => {
     setIsNavOpen(value);
@@ -110,6 +111,7 @@ new IonImageryProvider({ assetId: 3845 })
     if (token) {
       Ion.defaultAccessToken = token;
 
+      // create Cesium viewer
       const viewer = new Viewer("cesium-container", {
         imageryProvider: false,
         animation: false,
@@ -128,11 +130,11 @@ new IonImageryProvider({ assetId: 3845 })
         maximumScreenSpaceError: 32
       });
 
+      // set world imagery
       viewer.imageryLayers.addImageryProvider(
         new IonImageryProvider({ assetId: 3845 })
       );
 
-      viewer.scene.debugShowFramesPerSecond = true; // fps debugger
       viewer.clock.canAnimate = false; // do not start the clock before the points are created
       viewer.clock.multiplier = 0; // set initial clock as stopped
       viewer.resolutionScale = 0.7;
@@ -177,7 +179,7 @@ new IonImageryProvider({ assetId: 3845 })
       });
 
       // render scene with initial points
-      viewer.scene.render();
+      viewer.scene.requestRender();
 
       // start the clock and set options for it
       viewer.clock.canAnimate = true;
@@ -193,7 +195,7 @@ new IonImageryProvider({ assetId: 3845 })
   }, [token]);
 
   return (
-    <div>
+    <Layout>
       <Head>
         <title>Deimantas Butėnas - Satellite Tracker</title>
       </Head>
@@ -220,7 +222,7 @@ new IonImageryProvider({ assetId: 3845 })
           `}
         ></div>
       </main>
-    </div>
+    </Layout>
   )
 };
 
