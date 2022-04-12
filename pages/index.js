@@ -48,7 +48,7 @@ const Home = ({token}) => {
       }
     }
     // re-render the scene in case the clock (constant re-rendering) is stopped
-    viewerObject.scene.render();
+    viewerObject.scene.requestRender();
   };
 
   // navigation has been toggled
@@ -111,6 +111,7 @@ const Home = ({token}) => {
     if (token) {
       Ion.defaultAccessToken = token;
 
+      // create Cesium viewer
       const viewer = new Viewer("cesium-container", {
         imageryProvider: false,
         animation: false,
@@ -129,11 +130,11 @@ const Home = ({token}) => {
         maximumScreenSpaceError: 32
       });
 
+      // set world imagery
       viewer.imageryLayers.addImageryProvider(
         new IonImageryProvider({ assetId: 3845 })
       );
 
-      viewer.scene.debugShowFramesPerSecond = true; // fps debugger
       viewer.clock.canAnimate = false; // do not start the clock before the points are created
       viewer.clock.multiplier = 0; // set initial clock as stopped
       viewer.resolutionScale = 0.7;
@@ -178,7 +179,7 @@ const Home = ({token}) => {
       });
 
       // render scene with initial points
-      viewer.scene.render();
+      viewer.scene.requestRender();
 
       // start the clock and set options for it
       viewer.clock.canAnimate = true;

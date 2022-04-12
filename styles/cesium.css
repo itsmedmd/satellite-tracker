@@ -1,33 +1,3 @@
-/* FPS display */
-.cesium-performanceDisplay-defaultContainer {
-    position: absolute;
-    top: 50px;
-    right: 10px;
-    text-align: right;
-	background-color: gray;
-}
-
-.cesium-performanceDisplay {
-    background-color: rgba(40, 40, 40, 0.7);
-    padding: 7px;
-    border-radius: 5px;
-    border: 1px solid #444;
-    font: bold 12px sans-serif;
-	color: white;
-}
-
-.cesium-performanceDisplay-ms {
-    color: #de3;
-}
-
-.cesium-performanceDisplay-fps {
-    color: #e52;
-}
-
-.cesium-performanceDisplay-throttled {
-    color: #a42;
-}
-
 /* viewer */
 .fullSize {
 	display: block;
@@ -158,7 +128,10 @@
     margin: 0;
 }
 
-/* turn off cesium attribution from the main screen */
+/*
+    turn off cesium attribution from the main screen
+    and enable it in About page in navigation
+*/
 @media screen and (max-width: 800px) {
     .cesium-viewer-bottom {
         display: none;
