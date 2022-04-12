@@ -16,6 +16,7 @@ import propagateObjects from "utils/propagateObjects";
 
 import Navigation from "components/Navigation";
 import TimeControls from "components/TimeControls";
+import Layout from "components/Layout";
 
 export async function getStaticProps() {
   const token = process.env.CESIUM_TOKEN;
@@ -49,7 +50,7 @@ const Home = ({token}) => {
     // re-render the scene in case the clock (constant re-rendering) is stopped
     viewerObject.scene.render();
   };
-new IonImageryProvider({ assetId: 3845 })
+
   // navigation has been toggled
   const handleNavToggle = useCallback((value) => {
     setIsNavOpen(value);
@@ -193,7 +194,7 @@ new IonImageryProvider({ assetId: 3845 })
   }, [token]);
 
   return (
-    <div>
+    <Layout>
       <Head>
         <title>Deimantas Butėnas - Satellite Tracker</title>
       </Head>
@@ -220,7 +221,7 @@ new IonImageryProvider({ assetId: 3845 })
           `}
         ></div>
       </main>
-    </div>
+    </Layout>
   )
 };
 
