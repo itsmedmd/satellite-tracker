@@ -26,9 +26,7 @@ const Home = ({token}) => {
       <Head>
         <title>Deimantas Butėnas - Satellite Tracker</title>
       </Head>
-      {
-        (isLoading || !isLoading) && <Loader/>
-      }
+      {isLoading && <Loader/>}
       <CesiumView token={token} setLoadingStatus={setLoadingStatus}/>
     </Layout>
   )

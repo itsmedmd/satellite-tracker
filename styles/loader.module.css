@@ -13,20 +13,9 @@
     flex-direction: column;
 }
 
-.text {
-    color: white;
-    font-size: 20px;
-    margin-top: 28px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-.loader-content {
-    position: relative;
-}
-
 .circle {
-    position: relative;
+    animation: loading 2.5s infinite ease-in-out;
+    opacity: 1;
     width: 200px;
     height: 200px;
     border-radius: 100%;
@@ -39,66 +28,16 @@
         radial-gradient(ellipse at 50% 50%, rgba(69,117,255,1) 0%,  50%, rgb(34, 80, 121) 100%) 27.6px 25.6px / 144.4px 145.6px no-repeat no-repeat; /* Water */
 }
 
-.half-circle {
-    /* position: absolute;
-    background: inherit;
-    height: 90px;
-    width: 150px;
-    border-radius: 200px 200px 0 0;
-    z-index: 2002; */
+.text {
+    color: white;
+    font-size: 20px;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
-/* top: 20px;
-left: 25px;
-height: 90px;
-width: 150px;
-border-radius: 200px 200px 0 0;
-background-color: green;
-opacity: 0.7;
-z-index: 2002; */
-
-.object {
-    animation: orbitX 2.5s infinite ease-in;
-    z-index: 2001;
-}
-
-.object::after {
-    content: '';
-    animation: orbitY 2.5s infinite ease-out;
-    width: 28px;
-    height: 28px;
-    border-radius: 100%;
-    background-color: rgb(204, 0, 95);
-    position: absolute;
-    bottom: -12px;
-    left: -50px;
-}
-
-@keyframes orbitX {
+@keyframes loading {
     50% {
-        transform: translateX(300px);
-    }
-}
-
-@keyframes orbitY {
-    0% {
-        width: 28px;
-        height: 28px;
-    }
-
-    25% {
-        width: 22px;
-        height: 22px;
-    }
-
-    50% {
-        transform: translateY(-200px);
-        width: 16px;
-        height: 16px;
-    }
-
-    75% {
-        width: 20px;
-        height: 20px;
+        opacity: 0.4;
     }
 }
