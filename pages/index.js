@@ -27,9 +27,15 @@ const Home = ({token}) => {
         <title>Deimantas Butėnas - Satellite Tracker</title>
       </Head>
       {
-        isLoading &&
+        isLoading || !isLoading &&
         <div className={styles["loader"]}>
-          <h1>Loading!</h1>
+          <div className={styles["loader-content"]}>
+            <div className={styles["circle"]}>
+              <div className={styles["half-circle"]}></div>
+            </div>
+            <div className={styles["object"]}></div>
+          </div>
+          <p className={styles["text"]}>Loading 3D assets</p>
         </div>
       }
       <CesiumView token={token} setLoadingStatus={setLoadingStatus}/>
