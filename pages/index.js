@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Head from 'next/head';
+
 import Layout from "components/Layout";
 import CesiumView from "components/CesiumView";
-
-import styles from "styles/loader.module.css";
+import Loader from "components/Loader";
 
 export const getStaticProps = async () => {
   const token = process.env.CESIUM_TOKEN;
@@ -27,16 +27,7 @@ const Home = ({token}) => {
         <title>Deimantas Butėnas - Satellite Tracker</title>
       </Head>
       {
-        isLoading || !isLoading &&
-        <div className={styles["loader"]}>
-          <div className={styles["loader-content"]}>
-            <div className={styles["circle"]}>
-              <div className={styles["half-circle"]}></div>
-            </div>
-            <div className={styles["object"]}></div>
-          </div>
-          <p className={styles["text"]}>Loading 3D assets</p>
-        </div>
+        (isLoading || !isLoading) && <Loader/>
       }
       <CesiumView token={token} setLoadingStatus={setLoadingStatus}/>
     </Layout>
