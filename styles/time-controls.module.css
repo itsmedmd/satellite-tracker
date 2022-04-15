@@ -24,6 +24,14 @@
     color: white;
 }
 
+.time-text:first-of-type {
+    margin-right: 2px;
+}
+
+.time-text:last-of-type {
+    margin-left: 2px;
+}
+
 .time-text-bold {
     font-weight: bold;
 }

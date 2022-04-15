@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import styles from "styles/time-controls.module.css";
 
 const TimeControls = ({
-    clockTime,
+    clockDate,
     handleMultiplierChange,
     isNavOpen,
     isAboutOpen
 }) => {
     const [timeMultiplier, setTimeMultiplier] = useState(0);
-    const [currentTime, setCurrentTime] = useState(null);
+    const [currentDate, setCurrentDate] = useState(null);
 
     const handleTimeChange = (e) => {
         let multiplier = 0;
@@ -29,8 +29,8 @@ const TimeControls = ({
     };
 
     useEffect(() => {
-        setCurrentTime(clockTime.toLocaleString("lt-LT"));
-    }, [clockTime]);
+        setCurrentDate(clockDate.toLocaleString("lt-LT"));
+    }, [clockDate]);
 
     return (
         <div
@@ -43,9 +43,9 @@ const TimeControls = ({
             <div className={styles["time-text-container"]}>
                 <p className={styles["time-text"]}>
                     {
-                        currentTime === "Invalid Date" ?
+                        currentDate === "Invalid Date" ?
                         (new Date()).toLocaleString("lt-LT") :
-                        currentTime
+                        currentDate
                     }
                 </p>
                 <p className={styles["time-text"]}>

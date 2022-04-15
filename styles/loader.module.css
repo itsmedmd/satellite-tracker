@@ -1,0 +1,43 @@
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.circle {
+    animation: loading 2.5s infinite ease-in-out;
+    opacity: 1;
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    background:
+        radial-gradient(ellipse at 50% 50%, rgba(69,255,144,0) 0%,  50%, rgb(28, 66, 99) 50%,  52.94%, rgb(0, 0, 0) 70%) 0px 0px / 200px 200px no-repeat no-repeat, /* Mask */
+        radial-gradient(ellipse at 100% 100%, rgba(0,0,0,0.41) 0%,  24.72%, rgba(0,0,0,0) 65.2%) 32px 31.6px / 142px 142px no-repeat no-repeat, /* Shade */
+        radial-gradient(ellipse at 100% 100%, rgba(0,0,0,0.3) 0%,  50%, rgba(0,0,0,0) 71.29%) 56.8px 59.2px / 116.4px 115.6px no-repeat no-repeat, /* Shade */
+        radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.28) 0%,  14.69%, rgba(255,255,255,0) 68.07%) 39.2px 38.4px / 63.2px 64.8px no-repeat no-repeat, /* Shine */
+        radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0) 0%,  65.56%, rgba(255,255,255,0.49) 68.07%) 26px 27.2px / 149.6px 148px no-repeat no-repeat, /* Shine */
+        radial-gradient(ellipse at 50% 50%, rgba(69,117,255,1) 0%,  50%, rgb(34, 80, 121) 100%) 27.6px 25.6px / 144.4px 145.6px no-repeat no-repeat; /* Water */
+}
+
+.text {
+    color: white;
+    font-size: 20px;
+    margin: 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+@keyframes loading {
+    50% {
+        opacity: 0.4;
+    }
+}
