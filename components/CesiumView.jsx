@@ -35,7 +35,7 @@ const CesiumView = ({token, setLoadingStatus}) => {
   };
 
   // toggle points visibility of a specified category
-  const changePointsVisibility = (category) => {
+  const changePointsVisibility = useCallback((category) => {
     for (let i = 0; i < pointsCollectionObject.length; i++) {
       const point = pointsCollectionObject.get(i);
       if (point.color.red === category.color.red &&
@@ -47,7 +47,7 @@ const CesiumView = ({token, setLoadingStatus}) => {
 
     // re-render the scene in case the clock (constant re-rendering) is stopped
     viewerObject.scene.requestRender();
-  };
+  }, [pointsCollectionObject]);
 
   // toggle visibility of a specified category 
   const changeCategoryVisibility = useCallback((name) => {
