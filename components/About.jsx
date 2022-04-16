@@ -9,7 +9,7 @@ const About = () => {
                     easily accessible and provided by <a href="https://celestrak.com/NORAD/elements/"> CelesTrak</a>.
                 </p>
                 <p>
-                    To make any practical use of the TLE data, the project uses Shashwat Kandadai's JavaScript library called
+                    To make any practical use of the TLE data, the project uses Shashwat Kandadai&apos;s JavaScript library called
                     <a href="https://github.com/shashwatak/satellite-js"> satellite.js </a>
                     for satellite position propagation via TLE data sets that
                     contain orbital information about each object.

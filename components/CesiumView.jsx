@@ -62,7 +62,7 @@ const CesiumView = ({token, setLoadingStatus}) => {
 
     setObjectCategories(newCategories);
     changePointsVisibility(changedCategory);
-  }, [objectCategories, pointsCollectionObject, changePointsVisibility]);
+  }, [objectCategories, changePointsVisibility]);
 
   // propagate objects for each category
   // and get category identification (name, color, visibility)
