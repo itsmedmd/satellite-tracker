@@ -183,8 +183,8 @@ const CesiumView = ({token, setLoadingStatus}) => {
                     position: new Cartesian3(obj.position.x * km, obj.position.y * km, obj.position.z * km),
                     color: category.color,
                     pixelSize: 3,
-                    scaleByDistance: new NearFarScalar(8e6, 1.25, 11e6, 1),
-                    translucencyByDistance: new NearFarScalar(4e7, 1, 1e9, 0.7)
+                    // scaleByDistance: new NearFarScalar(8e6, 1.25, 11e6, 1),
+                    // translucencyByDistance: new NearFarScalar(4e7, 1, 1e9, 0.7)
                 })
             );
         });
