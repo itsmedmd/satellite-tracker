@@ -85,7 +85,7 @@
 /* Data attribution information modal */
 .cesium-credit-lightbox-overlay {
     display: none;
-    z-index: 1002;
+    z-index: 1007;
     position: absolute;
     top: 0;
     left: 0;
@@ -138,7 +138,7 @@
         right: initial;
         bottom: 46px !important;
         left: 0;
-        z-index: 1001;
+        z-index: 1006;
     }
 
     .about-open .cesium-viewer-bottom {

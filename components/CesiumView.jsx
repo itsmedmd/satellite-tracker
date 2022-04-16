@@ -161,7 +161,7 @@ const CesiumView = ({token, setLoadingStatus}) => {
 
         viewer.clock.canAnimate = false; // do not start the clock before the points are created
         viewer.clock.multiplier = 0; // set initial clock as stopped
-        viewer.resolutionScale = 0.7;
+        viewer.resolutionScale = 0.85;
         viewer.scene.screenSpaceCameraController.minimumZoomDistance = 4e6; // max zoom in distance in meters
         viewer.scene.screenSpaceCameraController.maximumZoomDistance = 0.5e9; // max zoom out distance in meters
 
@@ -182,8 +182,8 @@ const CesiumView = ({token, setLoadingStatus}) => {
                 pointsCollection.add({
                     position: new Cartesian3(obj.position.x * km, obj.position.y * km, obj.position.z * km),
                     color: category.color,
-                    pixelSize: 2,
-                    scaleByDistance: new NearFarScalar(8e6, 1.5, 11e6, 1),
+                    pixelSize: 3,
+                    scaleByDistance: new NearFarScalar(8e6, 1.35, 11e6, 1),
                     translucencyByDistance: new NearFarScalar(4e7, 1, 1e9, 0)
                 })
             );
@@ -220,7 +220,7 @@ const CesiumView = ({token, setLoadingStatus}) => {
             isNavOpen={isNavOpen}
             isAboutOpen={isAboutOpen}
         />
-        <main>
+        <main className="main-content">
             <div
                 id="cesium-container"
                 className={`
