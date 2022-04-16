@@ -47,7 +47,7 @@ const CesiumView = ({token, setLoadingStatus}) => {
 
     // re-render the scene in case the clock (constant re-rendering) is stopped
     viewerObject.scene.requestRender();
-  }, [pointsCollectionObject]);
+  }, [pointsCollectionObject, viewerObject.scene]);
 
   // toggle visibility of a specified category 
   const changeCategoryVisibility = useCallback((name) => {
