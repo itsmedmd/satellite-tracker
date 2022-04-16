@@ -19,7 +19,7 @@ const About = () => {
                     <a href="https://cesium.com"> Cesium</a>. By the nature of the data contained within
                     TLE sets, it is possible to determine the position of each object at any given moment
                     in time, be it the present, the future or the past. The project makes use of this feature
-                    with the "time flow multiplier" slider.
+                    with the &quot;time flow multiplier&quot; slider.
                 </p>
             </div>
         </div>

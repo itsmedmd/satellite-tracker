@@ -7,7 +7,6 @@ import propagateObjects from "utils/propagateObjects";
 
 const CesiumView = ({token, setLoadingStatus}) => {
   const startDate = new Date();
-  let lastDate = startDate;
   const [clockDate, setClockDate] = useState(startDate);
   const [viewerObject, setViewerObject] = useState({});
   const [pointsCollectionObject, setPointsCollectionObject] = useState({});
@@ -23,12 +22,12 @@ const CesiumView = ({token, setLoadingStatus}) => {
   // navigation has been toggled
   const handleNavToggle = useCallback((value) => {
     setIsNavOpen(value);
-  }, [isNavOpen]);
+  }, []);
   
   // about page in navigation has been toggled
   const handleAboutToggle = useCallback((value) => {
     setIsAboutOpen(value);
-  }, [isAboutOpen]);
+  }, []);
 
   // change time flow multiplier
   const changeMultiplier = (multiplier) => {
@@ -63,7 +62,7 @@ const CesiumView = ({token, setLoadingStatus}) => {
 
     setObjectCategories(newCategories);
     changePointsVisibility(changedCategory);
-  }, [objectCategories, pointsCollectionObject]);
+  }, [objectCategories, pointsCollectionObject, changePointsVisibility]);
 
   // propagate objects for each category
   // and get category identification (name, color, visibility)
@@ -90,6 +89,7 @@ const CesiumView = ({token, setLoadingStatus}) => {
   };
 
   useEffect(() => {
+    let lastDate = startDate;
     const Cesium = import("cesiumSource/Cesium");
     const combinedTLE = import("utils/combinedTLE");
 
