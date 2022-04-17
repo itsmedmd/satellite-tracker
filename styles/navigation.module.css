@@ -68,10 +68,10 @@
     max-width: 409px;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 525px) {
     .navigation {
         width: 100%;
-        border-right: 0;
+        border: 0;
         min-width: 0;
     }
 }
