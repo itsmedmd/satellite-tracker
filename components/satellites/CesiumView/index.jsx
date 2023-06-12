@@ -27,8 +27,7 @@ const CesiumView = ({
   const pointPixelSize = useMemo(() => 1.8, []);
 
   // categories that will have their objects hidden on load
-  // const hiddenByDefault = useMemo(() => ["Other", "Debris"], []);
-  const hiddenByDefault = useMemo(() => [], []);
+  const hiddenByDefault = useMemo(() => ["Other", "Debris"], []);
 
   const [objectCategories, setObjectCategories] = useState([]);
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -150,6 +149,7 @@ const CesiumView = ({
   }, [hiddenByDefault, recentLaunches, startDate]);
 
   const resetCamera = () => {
+    viewer.current.trackedEntity = undefined;
     viewer.current.camera.flyHome(0.6); // animation time in seconds
   };
 
