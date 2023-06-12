@@ -1,0 +1,98 @@
+@import "@/styles";
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  button {
+    width: 34px;
+    font-size: 30px;
+    line-height: 30px;
+    font-weight: bold;
+    height: 34px;
+    background-color: white;
+    color: rgb(0, 159, 189);
+  }
+}
+
+.search-results-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 82px);
+
+  .head {
+    width: 100%;
+    padding-right: 10px;
+    background-color: rgba(89, 183, 202, 0.3);
+    font-weight: bold;
+  }
+
+  .body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+
+    /* Set the width and height of the scrollbar */
+    &::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    /* Set the background color of the scrollbar */
+    &::-webkit-scrollbar-track {
+      background-color: rgba(white, 0.2);
+    }
+
+    /* Set the color of the scrollbar thumb */
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(0, 159, 189);
+    }
+
+    button:not(:disabled) {
+      @include non-touch {
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+
+  .head,
+  .body {
+    div {
+      display: grid;
+      grid-template-columns: 3fr 1fr 1fr 2fr 1fr;
+      align-items: center;
+
+      &:not(:last-of-type) {
+        border-bottom: 1px solid rgba(white, 0.3);
+      }
+
+      &:nth-child(even) {
+        background-color: rgba(89, 183, 202, 0.1);
+      }
+
+      span {
+        padding: 6px 10px 6px 6px;
+      }
+    }
+  }
+
+  .body {
+    div {
+      span {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .disabled-button {
+    cursor: not-allowed;
+    color: black;
+    background-color: white;
+    opacity: 0.35;
+  }
+}

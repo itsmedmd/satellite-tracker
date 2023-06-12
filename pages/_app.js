@@ -1,8 +1,15 @@
-import "styles/globals.css";
-import "styles/cesium.css";
+import "@/styles/global.scss";
+import "@/styles/satellites.scss";
 
-const MyApp = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />
-}
+import { Provider } from "react-redux";
+import store from "@/store";
 
-export default MyApp;
+const App = ({ Component, pageProps }) => {
+  return (
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>
+  );
+};
+
+export default App;

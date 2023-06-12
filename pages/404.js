@@ -1,21 +1,22 @@
 import Link from "next/link";
-import Head from 'next/head';
-import Layout from "components/Layout";
-import styles from "styles/404.module.css";
+import Head from "next/head";
+
+import Layout from "@/components/shared/Layout";
+import styles from "@/styles/pages/404.module.scss";
 
 const NotFound = () => {
   return (
-    <Layout>
+    <Layout hideOverflow={true}>
       <Head>
-        <title>Deimantas Butėnas - Satellite Tracker - Page not found</title>
+        <title>Page not found</title>
       </Head>
-      
+
       <div className={styles["not-found"]}>
-        <h1 className={styles["not-found__heading"]}>
+        <h1 className={styles["heading"]}>
           This page does not exist.
         </h1>
         <Link href="/">
-          <a className={styles["not-found__link"]}>Go to home page</a>
+          <a className={styles["link"]}>Go to home page</a>
         </Link>
       </div>
     </Layout>

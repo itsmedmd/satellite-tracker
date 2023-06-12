@@ -1,0 +1,11 @@
+@import "@/styles";
+
+.layout {
+	display: flex;
+	flex-direction: column;
+
+	.main {
+		min-height: 100vh;
+		overflow: hidden;
+	}
+}

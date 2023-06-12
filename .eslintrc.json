@@ -1,3 +1,16 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next", "next/core-web-vitals"],
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "rules": {
+    "max-len": ["error", 130],
+    "indent": ["error", 2],
+    "linebreak-style": 0,
+    "no-underscore-dangle": 0,
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "no-console": 0
+  }
 }

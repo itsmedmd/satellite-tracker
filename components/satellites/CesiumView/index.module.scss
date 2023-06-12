@@ -1,0 +1,46 @@
+@import "@/styles";
+
+.content {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.utils {
+  position: absolute;
+  top: 95px;
+  left: 133px;
+  transition: top 0.3s;
+  z-index: 1;
+
+  button {
+    background-color: transparent;
+    padding: 0;
+    margin: 0 7px;
+    height: 30px;
+    width: 30px;
+
+    .icon {
+      color: white;
+      height: inherit;
+      width: inherit;
+    }
+
+    &:hover {
+      .icon {
+        color: rgba(white, 0.9);
+      }
+    }
+  }
+
+  @include respond-to(max-width, 768px) {
+    left: 107px;
+
+    button {
+      height: 24px;
+      width: 24px;
+    }
+  }
+}

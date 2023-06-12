@@ -1,35 +1,60 @@
-import { useState } from 'react';
-import Head from 'next/head';
+// utils
+import { useState, useCallback } from "react";
+import Head from "next/head";
 
-import Layout from "components/Layout";
-import CesiumView from "components/CesiumView";
-import Loader from "components/Loader";
+// components and styles
+import Layout from "@/components/shared/Layout";
+import CesiumView from "@/components/satellites/CesiumView";
+import PageLoader from "@/components/shared/PageLoader";
 
 export const getStaticProps = async () => {
-  const token = process.env.CESIUM_TOKEN;
+  // Get satellite launches from the last 30 days
+  const promise = new Promise((resolve) => {
+    fetch("https://celestrak.org/NORAD/elements/gp.php?GROUP=last-30-days&FORMAT=3le")
+      .then((data) => data.text())
+      .then((data) => resolve(data.split("\n")))
+      .catch((err) => {
+        console.error(err);
+        resolve(null);
+      });
+  });
+
+  const recentLaunches = await promise;
+
   return {
     props: {
-      token
+      recentLaunches,
+      token: process.env.CESIUM_TOKEN
     },
-  }
+    revalidate: 3 * 60 * 60, // 3 hours in seconds
+  };
 };
 
-const Home = ({token}) => {
+const Satellites = ({ recentLaunches, token }) => {
   const [isLoading, setIsLoading] = useState(true);
 
-  const setLoadingStatus = (val) => {
-    setIsLoading(val);
-  };
+  const setLoadingStatus = useCallback((status) => {
+    setIsLoading(status);
+  }, []);
 
   return (
     <Layout>
       <Head>
-        <title>Deimantas Butėnas - Satellite Tracker</title>
+        <title>Satellites tracker</title>
       </Head>
-      {isLoading && <Loader/>}
-      <CesiumView token={token} setLoadingStatus={setLoadingStatus}/>
+
+      <PageLoader
+        isActive={isLoading}
+        text="Loading..."
+      />
+
+      <CesiumView
+        token={token}
+        recentLaunches={recentLaunches}
+        setLoadingStatus={setLoadingStatus}
+      />
     </Layout>
-  )
+  );
 };
 
-export default Home;
+export default Satellites;

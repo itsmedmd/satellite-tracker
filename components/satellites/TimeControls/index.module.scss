@@ -1,0 +1,74 @@
+@import "@/styles";
+
+.time-controls {
+  z-index: 1005;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 60%;
+  transform: translateX(-50%);
+  margin-bottom: 12px;
+  text-align: center;
+  max-width: 700px;
+
+  .time-range {
+    appearance: none;
+    background-color: rgba(white, 0.6);
+    height: 6px;
+    width: 100%;
+  }
+
+  .time-text {
+    margin: 0;
+    color: white;
+    position: relative;
+
+    &:first-of-type {
+      margin-right: 2px;
+    }
+
+    &:last-of-type {
+      margin-left: 2px;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .stop-time {
+      position: absolute;
+      margin-left: 30px;
+      font-weight: bold;
+      text-transform: uppercase;
+  
+      &:hover {
+        background-color: rgba(white, 0.9);
+      }
+    }
+  }
+
+  /* when about page in navigation is open*/
+  &.about-open {
+    display: none;
+  }
+
+  @include respond-to(max-width, 525px) {
+    width: 80%;
+  }
+  
+  @include respond-to(max-height, 600px) {
+    &.nav-open {
+      display: none;
+    }
+  }
+
+  @include respond-to(max-width, 400px) {
+    .time-text {
+      .stop-time {
+        margin-left: 0;
+        bottom: 28px;
+        right: 0;
+      }
+    }
+  }
+}

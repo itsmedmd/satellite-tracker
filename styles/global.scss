@@ -1,0 +1,30 @@
+@import "./mixins.scss";
+
+html,
+body {
+  background-color: black;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: 'Roboto Slab', serif;
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+label {
+  border: 0;
+  font-family: 'Roboto Slab', serif;
+  cursor: pointer;
+}
+

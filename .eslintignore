@@ -1,0 +1,6 @@
+/node-modules
+/.next/
+
+/public/Assets
+/public/Widgets
+/public/Workers

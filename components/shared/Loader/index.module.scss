@@ -1,0 +1,64 @@
+@import "@/styles";
+
+$mercury-color: rgb(117, 110, 105);
+$venus-color: rgb(206, 186, 76);
+$earth-color: rgb(61, 142, 167);
+$mars-color: rgb(184, 93, 51);
+$sun-color: rgb(255, 232, 21);
+
+.loader {
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	position: fixed;
+	left: 0;
+	top: 0;
+	transition: opacity 0.3s;
+	height: 100%;
+	width: 100%;
+	z-index: 99999;
+
+	.spinner,
+	.center {
+		border-radius: 50%;
+		position: absolute;
+	}
+
+	.center {
+		background-color: rgba($sun-color, 0.7);
+		height: 20px;
+		width: 20px;
+	}
+
+	.spinner:nth-of-type(1) {
+		@include spinner(1.4s, $mercury-color, 64px, 3.5px);
+		border-bottom: 0;
+		border-left: 0;
+	}
+
+	.spinner:nth-of-type(2) {
+		@include spinner(4.2s, $venus-color, 96px, 3.5px);
+		border-left: 0;
+		border-top: 0;
+	}
+
+	.spinner:nth-of-type(3) {
+		@include spinner(5.6s, $earth-color, 128px, 3.5px);
+		border-bottom: 0;
+		border-right: 0;
+	}
+
+	.spinner:nth-of-type(4) {
+		@include spinner(9.8s, $mars-color, 160px, 3.5px);
+		border-right: 0;
+		border-top: 0;
+	}
+
+	&.invisible {
+		opacity: 0;
+	}
+
+	&.finished {
+		display: none;
+	}
+}

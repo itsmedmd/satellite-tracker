@@ -1,0 +1,28 @@
+@mixin respond-to($media, $value) {
+	@media screen and ($media: $value) {
+		@content;
+	}
+}
+
+@mixin non-touch() {
+	@media screen and (hover: hover) {
+		@content;
+	}
+}
+
+@keyframes spinning-loader {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@mixin spinner($time, $color, $size, $borderSize) {
+	animation: spinning-loader $time linear infinite;
+	border: $borderSize solid rgba($color, 0.7);
+	height: $size;
+	width: $size;
+}

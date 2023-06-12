@@ -1,0 +1,27 @@
+@import "@/styles";
+
+.about {
+  width: 100vw;
+  height: 100vh;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 48px 16px 0;
+  text-align: justify;
+
+  .content {
+    font-size: 20px;
+    padding-bottom: 48px;
+
+    p {
+      margin: 28px 0;
+    }
+
+    a {
+      color: rgb(0, 209, 192);
+    }
+
+    @include respond-to(max-width, 768px) {
+      font-size: 16px;
+    }
+  }
+}

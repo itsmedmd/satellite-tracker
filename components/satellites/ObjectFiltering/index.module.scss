@@ -1,0 +1,51 @@
+@import "@/styles";
+
+.object-filtering {
+  margin-top: 50px;
+
+  .title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 0 16px;
+
+    .list-item {
+      margin-bottom: 6px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+
+      .circle {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 100%;
+        margin: 0 5px 0 4px;
+      }
+    }
+
+    @include respond-to(max-width, 300px) {
+      padding-left: 0;
+    }
+  }
+
+  @include respond-to(max-width, 768px) {
+    margin-top: 30px;
+
+    .title {
+      font-size: 18px;
+    }
+
+    .list {
+      padding: 0 0 0 8px;
+
+      .list-item {
+        font-size: 15px;
+      }
+    }
+  }
+}

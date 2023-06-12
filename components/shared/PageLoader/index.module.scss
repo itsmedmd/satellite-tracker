@@ -1,0 +1,19 @@
+.page-loader {
+	background-color: black;
+	align-items: center;
+	display: flex;
+	justify-content: center;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100vh;
+	width: 100%;
+	z-index: 99999;
+
+	.loader-text {
+		color: white;
+		font-size: 17px;
+		position: relative;
+		bottom: -110px;
+	}
+}
