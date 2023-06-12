@@ -95,4 +95,20 @@
     background-color: white;
     opacity: 0.35;
   }
+
+  @include respond-to(max-width, 450px) {
+    font-size: 13px;
+
+    button {
+      font-size: 13px;
+    }
+  }
+
+  @include respond-to(max-width, 370px) {
+    font-size: 11px;
+
+    button {
+      font-size: 11px;
+    }
+  }
 }

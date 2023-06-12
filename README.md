@@ -1,6 +1,6 @@
 # Satellite Tracker
 
-A website where you can track positions and orbits of around 25,000 satellites orbiting the Earth in a 3D geospatial viewer powered by Cesium.
+A website where you can track positions and orbits of around 22,000 satellites orbiting the Earth in a 3D geospatial viewer powered by Cesium.
 
 This project uses publicly available satellite TLE (Two-Line Element) data sets that are easily accessible and provided by [CelesTrak](https://celestrak.com/NORAD/elements/).
 

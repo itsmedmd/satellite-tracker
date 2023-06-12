@@ -27,7 +27,8 @@ const CesiumView = ({
   const pointPixelSize = useMemo(() => 1.8, []);
 
   // categories that will have their objects hidden on load
-  const hiddenByDefault = useMemo(() => ["Other", "Debris"], []);
+  // const hiddenByDefault = useMemo(() => ["Other", "Debris"], []);
+  const hiddenByDefault = useMemo(() => [], []);
 
   const [objectCategories, setObjectCategories] = useState([]);
   const [isNavOpen, setIsNavOpen] = useState(false);
