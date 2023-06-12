@@ -2,6 +2,8 @@
 
 A website where you can track positions and orbits of over 22,000 satellites orbiting the Earth in a 3D geospatial viewer powered by Cesium.
 
+* **Please see v2.0.0 pre-release notes for some details about functionality.**
+
 This project uses publicly available satellite TLE (Two-Line Element) data sets that are easily accessible and provided by [CelesTrak](https://celestrak.com/NORAD/elements/).
 
 To make practical use of the TLE data, the project uses Shashwat Kandadai's JavaScript library called [satellite.js](https://github.com/shashwatak/satellite-js) for satellite position propagation via TLE data sets that contain orbital information about each object.
