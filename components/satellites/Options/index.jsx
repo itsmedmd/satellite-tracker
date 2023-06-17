@@ -61,13 +61,13 @@ const Options = ({
             onClick={toggleOptions}
             className={styles["nav-toggle"]}
           >
-              Options
+            Options
           </button>
           <button
             onClick={toggleSearch}
             className={styles["nav-toggle"]}
           >
-              Search
+            Search
           </button>
         </div>
   );
