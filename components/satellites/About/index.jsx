@@ -23,6 +23,7 @@ const About = () => {
           physically exact and only approximated for the sake of getting better performance.
           Clicking on a satellite object displays approximate (interpolated) satellite orbit path.
         </p>
+        <p>Author: <a href="https://deimantasb.com">my personal website</a></p>
       </div>
     </div>
   );

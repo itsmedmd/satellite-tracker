@@ -62,9 +62,25 @@
 
   &.added-margin-left {
     margin-left: 8px;
+  }
 
-    @include respond-to(max-width, 768px) {
+  &.centered {
+    margin: 50px auto 0;
+  }
+
+  @include respond-to(max-width, 768px) {
+    &.added-margin-left {
       margin-left: 0;
+    }
+
+    &.centered {
+      margin: 30px auto 0;
+    }
+  }
+
+  &:last-of-type {
+    &.centered {
+      margin-top: -24px;
     }
   }
 }

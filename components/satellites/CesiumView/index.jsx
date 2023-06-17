@@ -1,12 +1,13 @@
 // utils
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
-import { faCameraRotate, faArrowRotateRight, faCompress } from "@fortawesome/free-solid-svg-icons";
+import { faCameraRotate, faArrowRotateRight, faCompress, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { enterFullscreen, exitFullscreen } from "@/utils/shared/screenUtils";
 import propagateObjects from "@/utils/satellites/propagateObjects";
 import { setSearchFilterValue, setShowingSearchItemsCount } from "@/store/reducers/satellitesSlice";
 import { useDispatch } from "react-redux";
 
 // components and styles
+import UserGuide from "@/components/satellites/UserGuide";
 import Options from "@/components/satellites/Options";
 import TimeControls from "@/components/satellites/TimeControls";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,10 +31,15 @@ const CesiumView = ({
   const hiddenByDefault = useMemo(() => ["Other", "Debris"], []);
 
   const [objectCategories, setObjectCategories] = useState([]);
+  const [isUserGuideVisible, setIsUserGuideVisible] = useState(true);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+
+  const setUserGuideVisibility = (value) => {
+    setIsUserGuideVisible(value);
+  };
 
   const handleNavToggle = () => {
     if (isFullscreen) {
@@ -406,6 +412,10 @@ const CesiumView = ({
 
   return (
     <>
+      {
+        isUserGuideVisible && <UserGuide hideUserGuide={() => setUserGuideVisibility(false)} />
+      }
+
       <Options
         objectCategories={objectCategories}
         toggleCategoryVisibility={toggleCategoryVisibility}
@@ -426,6 +436,7 @@ const CesiumView = ({
             }))
         }
       />
+
       <TimeControls
         handleMultiplierChange={changeMultiplier}
         isNavOpen={isNavOpen}
@@ -460,6 +471,15 @@ const CesiumView = ({
             >
               <FontAwesomeIcon
                 icon={faCompress}
+                className={styles["icon"]}
+              />
+            </button>
+            <button
+              onClick={() => setUserGuideVisibility(true)}
+              title="User guide"
+            >
+              <FontAwesomeIcon
+                icon={faCircleInfo}
                 className={styles["icon"]}
               />
             </button>

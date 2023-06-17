@@ -66,13 +66,14 @@ const Search = ({ entities, toggleSearch, selectEntity }) => {
           <div key={entity.id}>
             <span>{entity.name}</span>
             <span>{entity.satnum}</span>
-            <span>{entity.visible ? "visible" : "hidden"}</span>
+            <span>{entity.categoryName}</span>
             <span>{getUTCDate(entity.epochDate)}</span>
             <span>
               <button
                 disabled={!entity.visible}
                 onClick={() => selectEntity(entity.id)}
                 className={!entity.visible ? styles["disabled-button"] : ""}
+                title={entity.visible ? "Start tracking entity" : "Satellite category is hidden"}
               >
                 Select
               </button>
@@ -105,7 +106,7 @@ const Search = ({ entities, toggleSearch, selectEntity }) => {
           type="text"
           value={inputSearchValue}
           onChange={handleInputChange}
-          placeholder="Search name, category name, satnum"
+          placeholder="Search satellite name, category name, satnum"
           className={`
             ${sharedStyles["nav-toggle"]}
             ${sharedStyles["nav-open"]}
@@ -131,7 +132,7 @@ const Search = ({ entities, toggleSearch, selectEntity }) => {
           <div>
             <span>Name</span>
             <span>Satnum</span>
-            <span>Visibility</span>
+            <span>Category</span>
             <span>Data measurement time {"(UTC)"}</span>
             <span>Action</span>
           </div>
