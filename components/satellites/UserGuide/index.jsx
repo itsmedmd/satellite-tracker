@@ -12,15 +12,6 @@ const UserGuide = ({ hideUserGuide }) => {
         ${optionsStyles["about-open"]}
       `}
     >
-      <button
-        onClick={hideUserGuide}
-        className={`
-          ${optionsStyles["about-page-toggle"]}
-          ${optionsStyles["centered"]}
-        `}
-      >
-        Close user guide
-      </button>
       <div className={`${styles["about"]} ${styles["user-guide"]}`}>
         <div className={styles["content"]}>
           <h1>User guide</h1>
@@ -119,10 +110,13 @@ const UserGuide = ({ hideUserGuide }) => {
         onClick={hideUserGuide}
         className={`
           ${optionsStyles["about-page-toggle"]}
-          ${optionsStyles["centered"]}
+          ${optionsStyles["close-user-guide"]}
         `}
       >
         Close user guide
+        <span className={optionsStyles["button-extra-info"]}>
+          &#40;It can always be opened by clicking the <FontAwesomeIcon icon={faCircleInfo}/> icon&#41;
+        </span>
       </button>
     </div>
   );
